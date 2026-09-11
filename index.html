@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+ <title>Marketa — Buy & Sell Safely in Ghana</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <header>
+    <h1>Marketa</h1>
+    <div class="controls">
+      <input type="text" id="searchBox" placeholder="What are you looking for?" oninput="applyFilters()">
+      <button onclick="searchListings()">Search</button>
+      <button class="filter-btn" onclick="toggleFilters()">
+  <svg width="20" height="20" viewBox="0 0 24 24" fill="white">
+    <path d="M3 4h18l-7 8v6l-4 2v-8L3 4z"/>
+  </svg>
+</button>
+    </div>
+<button class="orders-btn" onclick="openOrders()">📦</button>
+<button class="orders-btn" onclick="openShop()">🧑‍💼</button>
+  </header>
+
+  <main>
+
+    <!-- Filters — hidden until toggled or searched -->
+    <section id="filterPanel" class="filters">
+      <select id="filterCondition" onchange="applyFilters()">
+        <option value="">Any condition</option>
+        <option>New</option>
+        <option>Used</option>
+        <option>Refurbished</option>
+      </select>
+
+      <input type="number" id="minPrice" placeholder="Min GH₵" oninput="applyFilters()">
+      <input type="number" id="maxPrice" placeholder="Max GH₵" oninput="applyFilters()">
+    </section>
+
+    <!-- Hero banner -->
+    <section class="hero">
+      <h2>Buy & Sell Safely in Ghana 🇬🇭</h2>
+      <p>Escrow-protected payments. Verified sellers. Zero wahala.</p>
+    </section>
+
+    <h2>Browse Categories</h2>
+
+        <div class="categories">
+      <div class="card" onclick="filterCategory('📱 Phones & Tablets')">📱<br>Phones & Tablets</div>
+      <div class="card" onclick="filterCategory('🚗 Vehicles')">🚗<br>Vehicles</div>
+      <div class="card" onclick="filterCategory('🏠 Property')">🏠<br>Property</div>
+      <div class="card" onclick="filterCategory('💻 Electronics')">💻<br>Electronics</div>
+      <div class="card" onclick="filterCategory('👗 Fashion')">👗<br>Fashion</div>
+      <div class="card" onclick="filterCategory('🪑 Home & Furniture')">🪑<br>Home & Furniture</div>
+    </div>
+
+    <h2>Hot Deals 🔥</h2>
+
+    <div id="filterBanner" style="display:none;"></div>
+
+    <div class="listings">
+    </div>
+
+    <div class="listings">
+    </div>
+
+    </main>
+
+<!-- Escrow modal — hidden by default -->
+<div id="escrowModal" class="modal">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h2>🔒 Escrow Checkout</h2>
+      <button class="close-btn" onclick="closeEscrow()">✕</button>
+    </div>
+
+    <div class="modal-body">
+      <!-- Step 1: Order summary -->
+      <div id="escrowStep1">
+        <div class="order-summary">
+          <p><strong id="escrowItemName"></strong></p>
+          <p id="escrowItemPrice"></p>
+          <p class="fee-row">Delivery fee: GH₵ 50</p>
+          <hr>
+          <p class="total-row">Total: <span id="escrowTotal"></span></p>
+        </div>
+
+        <input type="tel" id="buyerPhone" placeholder="Your phone number e.g. 024 4567">
+        <input type="text" id="buyerLocation" placeholder="Delivery location e.g. Kumasi, Asokwa">
+
+        <div class="escrow-note">
+          ✅ Your money is held safely by Marketa. The seller only gets paid AFTER you confirm delivery.
+        </div>
+
+        <button class="buy-btn" onclick="confirmOrder()">✅ Confirm & Pay</button>
+      </div>
+
+      <!-- Step 2: Confirmation -->
+      <div id="escrowStep2" style="display:none;">
+        <div class="success-icon">🎉</div>
+        <h3>Payment Held in Escrow!</h3>
+        <p class="order-ref">Order Ref: <strong id="orderRef"></strong></p>
+        <p class="escrow-note">The seller has been notified. You'll get a call to arrange delivery. Once you receive the item, confirm in "My Orders" to release payment.</p>
+        <button class="buy-btn" onclick="closeEscrow()">Done</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- My Orders modal — hidden by default -->
+<div id="ordersModal" class="modal">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h2>📦 My Orders</h2>
+      <button class="close-btn" onclick="closeOrders()">✕</button>
+    </div>
+
+    <div class="modal-body">
+      <div id="ordersList"></div>
+      <p id="noOrders" style="display:none; text-align:center; color:#777; padding:20px;">
+        No orders yet — go grab a deal! 🛒
+      </p>
+    </div>
+  </div>
+</div>
+
+<!-- My Shop modal — hidden by default -->
+<div id="shopModal" class="modal">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h2>🧑‍💼 My Shop</h2>
+      <button class="close-btn" onclick="closeShop()">✕</button>
+    </div>
+    <div class="modal-body">
+      <div id="shopList"></div>
+      <p id="noShopItems" style="display:none; text-align:center; color:#777; padding:20px;">
+        Your shop is empty — post something with + Sell! 🛍️
+      </p>
+    </div>
+  </div>
+</div>
+
+<!-- Detail modal — hidden by default -->
+<div id="detailModal" class="modal">
+  <div class="modal-content">
+    <div class="detail-photo" id="detailPhoto">📦</div>
+
+    <div class="detail-body">
+      <h2 id="detailName"></h2>
+      <p class="detail-price" id="detailPrice"></p>
+      <p class="detail-meta" id="detailMeta"></p>
+      <p class="detail-negotiable" id="detailNegotiable"></p>
+      <h3>Description</h3>
+      <p id="detailDescription" class="detail-desc"></p>
+
+      <div class="seller-box">
+        <strong>⭐ Seller Rating: 4.5 / 5</strong>
+        <p>23 successful sales • Member since 2024</p>
+      </div>
+
+      <button class="buy-btn" onclick="startEscrow()">🛒 Buy with Escrow</button>
+      <button class="chat-btn" onclick="chatSeller()">💬 Chat with Seller</button>
+    </div>
+  </div>
+</div>
+
+  <!-- Sell modal — hidden by default -->
+<div id="sellModal" class="modal">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h2>Post Your Listing</h2>
+      <button class="close-btn" onclick="toggleSellPage()">✕</button>
+    </div>
+
+    <div class="modal-body">
+      <!-- Photo upload -->
+      <label class="photo-upload" for="itemPhoto">
+        <div id="photoPreview">📷</div>
+        <p>Add Photo</p>
+      </label>
+      <input type="file" id="itemPhoto" accept="image/*" onchange="previewPhoto()" hidden>
+
+      <input type="text" id="itemName" placeholder="What are you selling? e.g. iPhone 12">
+      <input type="number" id="itemPrice" placeholder="Price in GH₵">
+      <input type="text" id="itemLocation" placeholder="Location e.g. Accra">
+
+<textarea id="itemDescription" rows="3" placeholder="Describe the item — any problems, why you're selling, etc."></textarea>
+
+<label class="check-row">
+  <input type="checkbox" id="itemNegotiable"> Price negotiable
+</label>
+
+      <select id="itemCategory">
+        <option value="">Select category</option>
+        <option>📱 Phones & Tablets</option>
+        <option>💻 Electronics</option>
+        <option>👗 Fashion</option>
+        <option>🪑 Home & Furniture</option>
+        <option>🚗 Vehicles</option>
+      </select>
+
+      <select id="itemCondition">
+        <option value="">Condition</option>
+        <option>New</option>
+        <option>Used</option>
+        <option>Refurbished</option>
+      </select>
+
+      <button onclick="postListing()">Post Listing</button>
+    </div>
+  </div>
+</div>
+
+
+  <!-- Floating Sell button -->
+  <button class="sell-btn" onclick="toggleSellPage()">+ Sell</button>
+
+  <footer>
+    <p>© 2025 Marketa. All rights reserved.</p>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
+

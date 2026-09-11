@@ -1,0 +1,610 @@
+/* Basic reset */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* Page-wide styles */
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f5f7fa;
+  color: #222;
+  padding-bottom: 80px; /* room for floating Sell button */
+}
+
+/* Header */
+header {
+  background-color: #0d6efd;
+  color: white;
+  padding: 16px;
+}
+
+header h1 {
+  font-size: 28px;
+  margin-bottom: 10px;
+}
+
+/* Search box + filter button */
+.controls {
+  display: flex;
+  gap: 8px;
+}
+
+.controls input {
+  flex: 1;
+  min-width: 0;
+  max-width: 220px;   /* 👈 the new line */
+  padding: 10px;
+  border: none;
+  border-radius: 8px;
+}
+
+.controls button {
+  padding: 10px 16px;
+  border: none;
+  border-radius: 8px;
+  background-color: #ffb70;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.filter-btn {
+  background-color: #0a4fc0 !important;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 14px;
+}
+
+/* Main content */
+main {
+  padding: 16px;
+}
+
+main h2 {
+  margin-bottom: 8px;
+}
+
+/* Filters — hidden by default */
+.filters {
+  display: none;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.filters.show {
+  display: flex;
+}
+
+.filters select,
+.filters input {
+  flex: 1;
+  min-width: 0;              /* stops inputs from overflowing */
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 14px;
+  background-color: white;
+}
+
+.filters input[type="number"] {
+  max-width: 90px;           /* keep min/max compact */
+}
+
+
+/* Hero banner */
+.hero {
+  background-color: #0d6efd;
+  color: white;
+  padding: 24px 16px;
+  border-radius: 12px;
+  margin-bottom: 24px;
+}
+
+.hero h2 {
+  margin-bottom: 6px;
+}
+
+/* Category grid */
+.categories {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+.card {
+  background-color: white;
+  padding: 20px 10px;
+  text-align: center;
+  border-radius: 12px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+  font-weight: bold;
+  font-size: 14px;
+}
+
+/* Product listings */
+.listings {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+.listing {
+  background-color: white;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 1px 3px rgba(0,0,00.1);
+}
+
+.thumb {
+  background-color: #e8f0fe;
+  font-size: 48px;
+  text-align: center;
+  padding: 30px 0;
+}
+
+.listing h3 {
+  font-size: 15px;
+  padding: 10px 12px 4px;
+}
+
+.price {
+  padding: 0 12px;
+  color: #0d6efd;
+  font-weight: bold;
+}
+
+.location {
+  padding: 4px 12px 12px;
+  color: #777;
+  font-size: 12px;
+}
+
+.sell-form h2 {
+  margin-bottom: 12px;
+}
+
+.sell-form input,
+.sell-form select,
+.sell-form button {
+  width: 100%;
+  padding: 12px;
+  margin-bottom: 10px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 15px;
+}
+
+.sell-form button {
+  background-color: #0d6efd;
+  color: white;
+  border: none;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+/* Floating Sell button */
+.sell-btn {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  padding: 16px 24px;
+  border: none;
+  border-radius: 50px;
+  background-color: #0d6efd;
+  color: white;
+  font-weight: bold;
+  font-size: 16px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+  z-index: 999;
+  cursor: pointer;
+}
+
+/* Footer */
+footer {
+  text-align: center;
+  padding: 16px;
+  color: #777;
+  font-size: 14px;
+}
+
+/* Modal — dark backdrop with centered popup */
+.modal {
+  display: none;
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background-color: rgba(0,0,0,0.5);
+  z-index: 500;
+}
+
+.modal.show {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal-content {
+  background-color: white;
+  border-radius: 16px;
+  width: 90%;
+  max-width: 400px;
+  max-height: 85vh;
+  overflow-y: auto;
+}
+
+.modal-header {
+  background-color: #0d6efd;
+  color: white;
+  padding: 14px 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-radius: 16px 16px 0 0;
+}
+
+.modal-header h2 {
+  font-size: 18px;
+}
+
+.close-btn {
+  background: none;
+  border: none;
+  color: white;
+  font-size: 20px;
+  cursor: pointer;
+}
+
+.modal-body {
+  padding: 16px;
+}
+
+.modal-body input,
+.modal-body select,
+.modal-body button {
+  width: 100%;
+  padding: 12px;
+  margin-bottom: 10px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 15px;
+  background-color: white;
+}
+
+.modal-body button {
+  background-color: #0d6efd;
+  color: white;
+  border: none;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+/* Photo upload box */
+.photo-upload {
+  display: block;
+  text-align: center;
+  border: 2px dashed #0d6efd;
+  border-radius: 12px;
+  padding: 16px;
+  margin-bottom: 12px;
+  cursor: pointer;
+  color: #0d6efd;
+  font-weight: bold;
+}
+
+.photo-upload #photoPreview {
+  font-size: 40px;
+}
+
+.photo-upload img {
+  max-width: 100%;
+  max-height: 120px;
+  border-radius: 8px;
+}
+
+.modal-body textarea {
+  width: 100%;
+  padding: 12px;
+  margin-bottom: 10px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 15px;
+  font-family: Arial, sans-serif;
+}
+
+.check-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 10px;
+  font-size: 15px;
+}
+
+.check-row input {
+  width: 20px;
+  height: 20px;
+}
+
+/* Detail modal */
+.detail-photo {
+  background-color: #e8f0fe;
+  font-size: 70px;
+  text-align: center;
+  padding: 40px 0;
+  border-radius: 16px 16px 0 0;
+}
+
+.detail-photo img {
+  max-width: 100%;
+  max-height: 200px;
+}
+
+.detail-body {
+  padding: 16px;
+}
+
+.detail-price {
+  color: #0d6efd;
+  font-weight: bold;
+  font-size: 22px;
+  margin: 4px 0;
+}
+
+.detail-meta {
+  color: #777;
+  font-size: 14px;
+  margin-bottom: 8px;
+}
+
+.detail-negotiable {
+  font-size: 14px;
+  font-weight: bold;
+  color: #1a8f3c;
+  margin-bottom: 12px;
+}
+
+.detail-desc {
+  font-size: 14px;
+  color: #444;
+  margin-bottom: 16px;
+  white-space: pre-wrap;
+}
+
+.seller-box {
+  background-color: #f5f7fa;
+  border-radius: 8px;
+  padding: 10px 12px;
+  font-size: 14px;
+  margin-bottom: 16px;
+}
+
+.seller-box p {
+  color: #777;
+  font-size: 12px;
+  margin-top: 4px;
+}
+
+.detail-body button {
+  width: 100%;
+  padding: 14px;
+  margin-bottom: 10px;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.buy-btn {
+  background-color: #1a8f3c;
+  color: white;
+}
+
+.chat-btn {
+  background-color: #0d6efd;
+  color: white;
+}
+
+.listing h3,
+.listing .location {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.thumb img {
+  width: 100%;
+  height: 120px;
+  object-fit: cover;
+  display: block;
+}
+
+/* Escrow modal */
+.order-summary {
+  background-color: #f5f7fa;
+  border-radius: 8px;
+  padding: 12px;
+  margin-bottom: 12px;
+  font-size: 15px;
+}
+
+.order-summary p {
+  margin: 4px 0;
+}
+
+.fee-row {
+  color: #777;
+  font-size: 14px;
+}
+
+.total-row {
+  font-weight: bold;
+  font-size: 17px;
+}
+
+.escrow-note {
+  background-color: #e8f7ec;
+  border-radius: 8px;
+  padding: 10px 12px;
+  font-size: 13px;
+  color: #1a8f3c;
+  margin-bottom: 12px;
+}
+
+.success-icon {
+  font-size: 60px;
+  text-align: center;
+  margin: 10px 0;
+}
+
+.order-ref {
+  background-color: #f5f7fa;
+  padding: 10px;
+  border-radius: 8px;
+  font-size: 15px;
+  margin: 12px 0;
+}
+
+.order-card {
+  background-color: #f5f7fa;
+  border-radius: 8px;
+  padding: 12px;
+  margin-bottom: 10px;
+  font-size: 14px;
+}
+
+.order-card .ref {
+  font-weight: bold;
+  color: #0d6efd;
+}
+
+.status-badge {
+  display: inline-block;
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: bold;
+  margin: 8px 0;
+}
+
+.status-held {
+  background-color: #fff3cd;
+  color: #8a6d00;
+}
+
+.status-released {
+  background-color: #d4f5dc;
+  color: #1a8f3c;
+}
+
+.release-btn {
+  width: 100%;
+  padding: 10px;
+  border: none;
+  border-radius: 8px;
+  background-color: #1a8f3c;
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+/* My Shop */
+.shop-card {
+  background-color: #f5f7fa;
+  border-radius: 8px;
+  padding: 12px;
+  margin-bottom: 10px;
+  font-size: 14px;
+}
+
+.shop-card .shop-item-name {
+  font-weight: bold;
+  font-size: 15px;
+}
+
+.shop-card .shop-item-price {
+  color: #0d6efd;
+  font-weight: bold;
+}
+
+.shop-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.edit-btn, .delete-btn {
+  flex: 1;
+  padding: 8px;
+  border: none;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+  font-size: 13px;
+}
+
+.edit-btn {
+  background-color: #e7f0ff;
+  color: #0d6efd;
+}
+
+.delete-btn {
+  background-color: #ffe7e7;
+  color: #c0392b;
+}
+
+/* Incoming orders in My Shop */
+.shop-order {
+  background-color: #fff8e6;
+  border-radius: 8px;
+  padding: 12px;
+  margin-bottom: 10px;
+  font-size: 14px;
+}
+
+.ship-btn {
+  width: 100%;
+  padding: 8px;
+  border: none;
+  border-radius: 8px;
+  background-color: #0d6efd;
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+  font-size: 13px;
+}
+
+/* Shipped status badge for My Orders */
+.status-badge.status-shipped {
+  background-color: #fff3cd;
+  color: #856404;
+}
+
+#filterBanner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #eaf2ff;
+  border: 1px solid #b9d4ff;
+  border-radius: 12px;
+  padding: 10px 14px;
+  margin: 10px 0;
+  font-weight: bold;
+  color: #0a57d0;
+}
+
+#filterBanner .clear-btn {
+  background: #0a57d0;
+  color: white;
+  border: none;
+  border-radius: 20px;
+  padding: 6px 14px;
+  font-size: 14px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
