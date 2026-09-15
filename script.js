@@ -43,10 +43,10 @@ function toggleFilters() {
   document.getElementById("filterPanel").classList.toggle("show");
 }
 
-// Load saved listings
 function loadListings() {
- document.getElementById("filterBanner").style.display = "none";   // ← add this line
+  document.getElementById("filterBanner").style.display = "none";
   const listingsDiv = document.querySelector(".listings");
+  listingsDiv.innerHTML = "";   // ← ADD THIS LINE
   const saved = JSON.parse(localStorage.getItem("marketaListings")) || [];
 
   saved.forEach(function(item, index) {
@@ -60,11 +60,19 @@ function createCard(item, index) {
   const card = document.createElement("div");
   card.className = "listing";
   card.onclick = function() { showDetail(index); };
+  if (item.sold) {
+    card.onclick = null;
+    card.style.opacity = "0.6";
+  }
+  if (item.sold) {
+    card.onclick = null;
+    card.style.opacity = "0.6";
+  }
 
         card.innerHTML =
         '<div class="thumb">' + (item.photo ? '<img src="' + item.photo + '" style="width:100%;height:100%;object-fit:cover;">' : '📦') + '</div>' +
         '<h3>' + item.name + '</h3>' +
-        '<p class="price">GH₵ ' + Number(item.price).toLocaleString() + '</p>' +
+        '<p class="price">GH₵ ' + Number(item.price).toLocaleString() + (item.sold ? ' <span class="sold-badge">SOLD</span>' : '') + '</p>' +
         '<p class="location">📍 ' + item.location + ' • ' + item.condition + '</p>';
   return card;
 }
@@ -75,6 +83,8 @@ function showDetail(index) {
   const item = saved[index];
 
   if (!item) return;
+  if (item.sold) return;
+
   currentItemIndex = index;
 
   document.getElementById("detailPhoto").innerHTML = item.photo
@@ -148,7 +158,7 @@ function confirmOrder() {
   if (!item) return;
 
   const orders = JSON.parse(localStorage.getItem("marketaOrders")) || [];
-  const refNumber = "MKT-" + String(orders.length + 1).padStart(4, "0");
+      const refNumber = "MKT-" + String(Date.now()).slice(-6);
 
   const order = {
     ref: refNumber,
@@ -179,17 +189,24 @@ function closeEscrow() {
 // Open My Orders
 function openOrders() {
   const orders = JSON.parse(localStorage.getItem("marketaOrders")) || [];
+  orders.reverse();
   const listDiv = document.getElementById("ordersList");
   const noOrders = document.getElementById("noOrders");
 
   listDiv.innerHTML = "";
 
-  if (orders.length === 0) {
+    const visible = orders.filter(function(order) {
+    return !order.buyerDeleted;
+  });
+
+  if (visible.length === 0) {
     noOrders.style.display = "block";
   } else {
     noOrders.style.display = "none";
 
     orders.forEach(function(order, index) {
+      if (order.buyerDeleted) return;
+
       const card = document.createElement("div");
       card.className = "order-card";
 
@@ -199,21 +216,35 @@ function openOrders() {
       let badge;
 
       if (released) {
-        badge = `<span class="status-badge status-released">✅ Funds Released</span>`;
+        badge = '<span class="status-badge status-released">✅ Funds Released</span>';
       } else if (shipped) {
-        badge = `<span class="status-badge status-shipped">🚚 Shipped — on the way!</span>
-                 <br><button class="release-btn" onclick="releaseFunds(${index})">✅ Confirm Delivery — Release Payment</button>`;
+        badge = '<span class="status-badge status-shipped">🚚 Shipped — on the way!</span>' +
+          '<br><button class="release-btn" onclick="releaseFunds(\'' + order.ref + '\')">✅ Confirm Delivery — Release Payment</button>' +
+                   '<br><button class="ship-btn" style="background:#d9534f;color:white;margin-top:6px;" onclick="openReturn(\'' + order.ref + '\')">↩️ Return Goods</button>';
+      } else if (order.status === "returnRequested") {
+        badge = '<span class="status-badge status-held">⚠️ Return requested — ' + (order.returnReason || "Item doesn\'t match description") + '</span>' +
+          '<br><span style="color:#b36b00;">📦 Ship the item back to the seller. Your money is still held safely in escrow.</span>';
+      } else if (order.status === "refunded") {
+        badge = '<span class="status-badge status-held">💸 Refunded — your money was returned</span>';
+      } else if (order.status === "disputed") {
+        badge = '<span class="status-badge status-held">⚖️ Dispute under review — ' + (order.returnReason || "") + '</span>' +
+          '<br><span style="color:#b36b00;">An admin is reviewing this dispute. Your funds remain safely held until a ruling is made.</span>';
       } else {
-        badge = `<span class="status-badge status-held">🔒 Funds Held in Escrow</span>
-                 <br><button class="release-btn" onclick="releaseFunds(${index})">✅ Confirm Delivery — Release Payment</button>`;
+        badge = '<span class="status-badge status-held">🔒 Funds Held in Escrow</span>' +
+          '<br><span style="color:#b36b00;">Waiting for the seller to mark your order as shipped…</span>';
       }
 
-     card.innerHTML =
-      '<b>' + order.ref + '</b> — ' + order.itemName +
-      '<br>Total paid: GH₵ ' + order.total.toLocaleString() +
-      '<br>Date: ' + order.date +
-      '<br>' + badge +
-      '<br><button class="delete-btn" onclick="deleteOrder(' + index + ')">🗑️ Delete Order</button>';
+           card.innerHTML =
+        '<div class="order-header" onclick="toggleOrder(\'d' + order.ref + '\')">' +
+          '<b>' + order.ref + ' — ' + order.itemName + '</b>' +
+          '<span class="chevron" id="chev-d' + order.ref + '">▸</span>' +
+        '</div>' +
+        '<div class="order-details" id="d' + order.ref + '">' +
+          '<br>Total paid: GH¢ ' + order.total.toLocaleString() +
+          '<br>Date: ' + order.date +
+          '<br>' + badge +
+          '<br><button class="ship-btn" onclick="deleteOrder(\'' + order.ref + '\')">🗑 Delete</button>' +
+        '</div>';
 
       listDiv.appendChild(card);
     });
@@ -224,28 +255,44 @@ function openOrders() {
 
 
 // Release escrow funds when buyer confirms delivery
-function releaseFunds(index) {
+function releaseFunds(ref) {
   if (!confirm("Did you receive the item in good condition? Payment will be released to the seller.")) {
     return;
   }
 
   const orders = JSON.parse(localStorage.getItem("marketaOrders")) || [];
-  orders[index].status = "Funds released to seller";
+  orders.forEach(function(o) {
+    if (o.ref === ref) {
+      o.status = "Funds released to seller";
+    }
+  });
   localStorage.setItem("marketaOrders", JSON.stringify(orders));
 
   openOrders();
 }
 
-// Delete an order from My Orders (with safety guard!)
-function deleteOrder(index) {
+// Delete an order from My Orders (soft delete, ref-based)
+function deleteOrder(ref) {
   if (!confirm("Delete this order permanently? This cannot be undone.")) {
     return;
   }
 
   const orders = JSON.parse(localStorage.getItem("marketaOrders")) || [];
-  orders.splice(index, 1);
-  localStorage.setItem("marketaOrders", JSON.stringify(orders));
 
+  // Soft delete: hide from buyer, keep record for the seller
+  orders.forEach(function(o) {
+    if (o.ref === ref) {
+      o.buyerDeleted = true;
+      if (o.sellerDeleted) o.removeMe = true;
+    }
+  });
+
+  // Physically remove only if BOTH sides have deleted it
+  for (let i = orders.length - 1; i >= 0; i--) {
+    if (orders[i].removeMe) orders.splice(i, 1);
+  }
+
+  localStorage.setItem("marketaOrders", JSON.stringify(orders));
   openOrders();
 }
 
@@ -258,6 +305,7 @@ function closeOrders() {
 function openShop() {
   const saved = JSON.parse(localStorage.getItem("marketaListings")) || [];
   const orders = JSON.parse(localStorage.getItem("marketaOrders")) || [];
+  orders.reverse();
   const listDiv = document.getElementById("shopList");
   const noItems = document.getElementById("noShopItems");
 
@@ -285,23 +333,38 @@ function openShop() {
       let action;
 
       if (released) {
-        action = `<span class="status-badge status-released">✅ Delivered — Payment Released</span>`;
+        action = '<span class="status-badge status-released">✅ Delivered — Payment Released</span>';
       } else if (shipped) {
-        action = `<span class="status-badge status-shipped">🚚 Shipped — awaiting buyer confirmation</span>`;
+        action = '<span class="status-badge status-shipped">🚚 Shipped — awaiting buyer confirmation</span>';
+      } else if (order.status === "returnRequested") {
+        action = '<span class="status-badge status-held">⚠️ RETURN REQUESTED — ' + (order.returnReason || "Item doesn\'t match description") + '</span>' +
+          '<br><span style="color:#b36b00;">📦 The buyer is shipping the item back to you. When it arrives, refund them below. No payment will be released.</span>' +
+          '<br><button class="ship-btn" style="background:#d9534f;" onclick="refundBuyer(\'' + order.ref + '\')">💸 Refund Buyer</button>' +
+          '<br><button class="ship-btn" style="background:#e67e22;margin-top:6px;" onclick="disputeOrder(\'' + order.ref + '\')">⚖️ Dispute — Ask Admin</button>';
+      } else if (order.status === "refunded") {
+        action = '<span class="status-badge status-held">💸 Order Refunded — no payment released</span>';
+      } else if (order.status === "disputed") {
+        action = '<span class="status-badge status-held">⚖️ Buyer disputes this order — admin reviewing. Funds frozen.</span>';
       } else {
-        action = `<button class="ship-btn" onclick="markShipped('${order.ref}')">🚚 Mark as Shipped</button>`;
+        action = '<button class="ship-btn" onclick="markShipped(\'' + order.ref + '\')">🚚 Mark as Shipped</button>';
       }
 
-    card.innerHTML =
-      '<b>' + order.ref + '</b> — ' + order.itemName +
-      '<br>💰 GH₵ ' + order.total.toLocaleString() + ' (held in escrow)' +
-      '<br>📞 Buyer: ' + order.buyerPhone + ' • 📍 ' + order.buyerLocation +
-      '<br>' + action;
+      card.innerHTML =
+        '<div class="order-header" onclick="toggleOrder(\'s' + order.ref + '\')">' +
+          '<b>' + order.ref + ' — ' + order.itemName + '</b>' +
+          '<span class="chevron" id="chev-s' + order.ref + '">▸</span>' +
+        '</div>' +
+        '<div class="order-details" id="s' + order.ref + '">' +
+          '<br>💰 GH¢ ' + order.total.toLocaleString() + ' (held in escrow)' +
+          '<br>📞 Buyer: ' + order.buyerPhone + ' • 📍 ' + order.buyerLocation +
+'<br><button class="ship-btn" onclick="deleteSellerOrder(\'' + order.ref + '\')">🗑 Remove</button>' +
+        '<br>' + action +
+        '</div>';
 
       listDiv.appendChild(card);
     });
 
-    // --- My listings section ---
+// --- My listings section ---
     if (saved.length > 0) {
       const heading2 = document.createElement("h3");
       heading2.textContent = "🛍️ My Listings";
@@ -314,20 +377,22 @@ function openShop() {
 
       const info = "• 📍 " + item.location + " • " + item.condition;
 
-      card.innerHTML = `
-        <span class="shop-item-name">${item.name}</span>
-        <br>
-        <span class="shop-item-price">GH₵ ${Number(item.price).toLocaleString()}</span>
-        ${info}
-        <div class="shop-actions">
-          <button class="delete-btn" onclick="deleteListing(${index})">🗑️ Delete</button>
-        </div>
-      `;
+            card.innerHTML = `
+  <span class="shop-item-name">${item.name}
+</span>
+  <br>
+  <span class="shop-item-price">GH₵ ${Number(item.price).toLocaleString()}</span>
+  ${info}
+  <div class="shop-actions">
+    <button class="ship-btn" onclick="toggleSold(${index})">Mark as Sold</button>
+    <button class="ship-btn" style="background:#d9534f;" onclick="deleteListing(${index})">🗑️ Delete</button>
+  </div>
+`;
+
       listDiv.appendChild(card);
     });
   }
-
-  document.getElementById("shopModal").classList.add("show");
+ document.getElementById("shopModal").classList.add("show");
 }
 
 // Seller marks an order as shipped
@@ -499,5 +564,157 @@ function filterCategory(category) {
 
 function clearCategoryFilter() {
   document.getElementById("filterBanner").style.display = "none";
+  loadListings();
+}
+
+var currentReturnIndex = null;
+
+function openReturn(ref) {
+  currentReturnRef = ref;
+  document.getElementById("returnModal").style.display = "flex";
+}
+
+function closeReturn() {
+  currentReturnRef = null;
+  document.getElementById("returnModal").style.display = "none";
+}
+
+function submitReturn() {
+  const orders = JSON.parse(localStorage.getItem("marketaOrders")) || [];
+  const reason = document.getElementById("returnReason").value;
+  const note = document.getElementById("returnNote").value;
+
+    orders.forEach(function(o) {
+    if (o.ref === currentReturnRef) {
+      o.status = "returnRequested";
+      o.returnReason = reason;
+      if (note) o.returnNote = note;
+    }
+  });
+
+  localStorage.setItem("marketaOrders", JSON.stringify(orders));
+  closeReturn();
+  openOrders();   // ← re-renders buyer dashboard; use YOUR orders-reload name if different
+}
+
+function refundBuyer(ref) {
+  const orders = JSON.parse(localStorage.getItem("marketaOrders")) || [];
+  orders.forEach(function(order) {
+    if (order.ref === ref) {
+      order.status = "refunded";
+    }
+  });
+  localStorage.setItem("marketaOrders", JSON.stringify(orders));
+  openShop();
+}
+function disputeOrder(ref) {
+  if (!confirm("Escalate this order to the Marketa admin? Held funds will be frozen until a ruling is made.")) return;
+  const orders = JSON.parse(localStorage.getItem("marketaOrders")) || [];
+  orders.forEach(function(order) {
+    if (order.ref === ref) {
+      order.status = "disputed";
+      order.disputedAt = new Date().toLocaleDateString();
+    }
+  });
+  localStorage.setItem("marketaOrders", JSON.stringify(orders));
+  openShop();
+}
+var logoTaps = 0;
+var logoTapTimer = null;
+
+function adminTap() {
+  logoTaps++;
+  if (logoTapTimer) clearTimeout(logoTapTimer);
+  logoTapTimer = setTimeout(function() { logoTaps = 0; }, 2000);
+
+  if (logoTaps >= 5) {
+    logoTaps = 0;
+    openAdmin();
+  }
+}
+
+function openAdmin() {
+  document.querySelector("header").style.display = "none";
+  document.querySelector("main").style.display = "none";
+  document.getElementById("adminPanel").style.display = "block";
+
+  const orders = JSON.parse(localStorage.getItem("marketaOrders")) || [];
+  orders.reverse();
+  const disputes = orders.filter(function(order) {
+    return order.status === "disputed";
+  });
+
+  const box = document.getElementById("adminDisputes");
+  if (disputes.length === 0) {
+    box.innerHTML = '<p>✅ No active disputes. All is calm.</p>';
+    return;
+  }
+
+  box.innerHTML = disputes.map(function(order) {
+    return '<div class="order-card">' +
+      '<b>' + order.ref + '</b> — ' + order.itemName + '<br>' +
+      '💰 GH¢ ' + order.price + '<br>' +
+      '⚠️ Reason: ' + (order.returnReason || "Not stated") + '<br>' +
+      (order.returnNote ? '📝 Note: ' + order.returnNote + '<br>' : '') +
+      '📅 Disputed: ' + (order.disputedAt || "") + '<br>' +
+            '<button class="ship-btn" style="background:#d9534f; display:block; margin-bottom:8px;" onclick="adminRuling(\'' + order.ref + '\',\'refund\')">💸 Rule: Refund Buyer</button>' +
+      '<button class="ship-btn" style="background:#28a745; display:block; " onclick="adminRuling(\'' + order.ref + '\',\'release\')">✅ Rule: Release to Seller</button>' +
+      '</div>';
+  }).join("");
+}
+
+function closeAdmin() {
+  document.getElementById("adminPanel").style.display = "none";
+  document.querySelector("header").style.display = "";
+  document.querySelector("main").style.display = "";
+  window.scrollTo(0, 0);
+}
+
+
+function adminRuling(ref, ruling) {
+  if (!confirm("Are you sure? This ruling is final.")) return;
+  const orders = JSON.parse(localStorage.getItem("marketaOrders")) || [];
+  orders.forEach(function(order) {
+    if (order.ref === ref) {
+      order.status = (ruling === "refund") ? "refunded" : "Funds released to seller";
+      order.ruledBy = "admin";
+    }
+  });
+  localStorage.setItem("marketaOrders", JSON.stringify(orders));
+  openAdmin();
+}
+function toggleOrder(id) {
+  const el = document.getElementById(id);
+  const chev = document.getElementById("chev-" + id);
+  if (el.style.display === "block") {
+    el.style.display = "none";
+    chev.textContent = "▸";
+  } else {
+    el.style.display = "block";
+    chev.textContent = "▾";
+  }
+}
+
+function deleteSellerOrder(ref) {
+  const orders = JSON.parse(localStorage.getItem("marketaOrders")) || [];
+  const idx = orders.findIndex(function(o) { return o.ref === ref; });
+  if (idx !== -1) {
+    orders.splice(idx, 1);
+    localStorage.setItem("marketaOrders", JSON.stringify(orders));
+    openShop();
+  }
+}
+function toggleSold(index) {
+  const saved = JSON.parse(localStorage.getItem("marketaListings")) || [];
+  saved[index].sold = !saved[index].sold;
+  localStorage.setItem("marketaListings", JSON.stringify(saved));
+  openShop();
+  loadListings();
+}
+function toggleSold(index) {
+  const saved = JSON.parse(localStorage.getItem("marketaListings")) || [];
+  saved[index].sold = !saved[index].sold;
+  localStorage.setItem("marketaListings", JSON.stringify(saved));
+  openShop();
   loadListings();
 }

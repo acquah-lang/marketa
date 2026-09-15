@@ -9,7 +9,7 @@
 <body>
 
   <header>
-    <h1>Marketa</h1>
+    <h1 onclick="adminTap()">Marketa</h1>
     <div class="controls">
       <input type="text" id="searchBox" placeholder="What are you looking for?" oninput="applyFilters()">
       <button onclick="searchListings()">Search</button>
@@ -212,15 +212,46 @@
   </div>
 </div>
 
-
   <!-- Floating Sell button -->
   <button class="sell-btn" onclick="toggleSellPage()">+ Sell</button>
+
+  <script>
+    window.onerror = function(msg, src, line) {
+    alert("⚠️ ERROR: " + msg + " | Line " + line);
+    };
+  </script>
+  <script src="script.js"></script>
+
+  <!-- Return Reason Popup -->
+  <div id="returnModal" class="modal" style="display:none;">
+    <div class="modal-content">
+      <h3>↩️ Return Goods</h3>
+      <p style="font-size:14px;">Your money stays safely held in escrow until the seller refunds you.</p>
+      <p><b>Why doesn't the item match?</b></p>
+      <select id="returnReason" style="width:100%;padding:12px;margin-bottom:10px;">
+        <option>Item doesn't match description</option>
+        <option>Item is damaged or faulty</option>
+        <option>Wrong item delivered</option>
+        <option>Item is fake / not genuine</option>
+      </select>
+      <textarea id="returnNote" placeholder="Optional: add details..." style="width:100%;padding:12px;box-sizing:border-box;height:70px;margin-bottom:10px;"></textarea>
+      <button class="btn-primary" style="width:100%;background:#d9534f;" onclick="submitReturn()">↩️ Request Return</button>
+      <button style="width:100%;margin-top:8px;background:none;border:none;color:#666;" onclick="closeReturn()">Cancel</button>
+    </div>
+  </div>
 
   <footer>
     <p>© 2025 Marketa. All rights reserved.</p>
   </footer>
 
-  <script src="script.js"></script>
+  <!-- Admin Dispute Panel (secret: tap logo 5x) -->
+  <div id="adminPanel" style="display:none; padding:16px; max-width:100%; overflow-x:hidden;">
+    <h2>🧑‍⚖️ Marketa Admin — Disputes</h2>
+    <div id="adminDisputes"></div>
+    <br>
+    <button class="filter-btn" onclick="closeAdmin()">← Back to Marketa</button>
+  </div>
+
 </body>
 </html>
 

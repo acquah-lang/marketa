@@ -44,7 +44,7 @@ header h1 {
   padding: 10px 16px;
   border: none;
   border-radius: 8px;
-  background-color: #ffb70;
+  background-color: #ffb700;
   font-weight: bold;
   cursor: pointer;
 }
@@ -137,7 +137,7 @@ main h2 {
   background-color: white;
   border-radius: 12px;
   overflow: hidden;
-  box-shadow: 0 1px 3px rgba(0,0,00.1);
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
 }
 
 .thumb {
@@ -502,7 +502,7 @@ footer {
 }
 
 .release-btn {
-  width: 100%;
+  width: auto;
   padding: 10px;
   border: none;
   border-radius: 8px;
@@ -537,26 +537,6 @@ footer {
   margin-top: 8px;
 }
 
-.edit-btn, .delete-btn {
-  flex: 1;
-  padding: 8px;
-  border: none;
-  border-radius: 8px;
-  font-weight: bold;
-  cursor: pointer;
-  font-size: 13px;
-}
-
-.edit-btn {
-  background-color: #e7f0ff;
-  color: #0d6efd;
-}
-
-.delete-btn {
-  background-color: #ffe7e7;
-  color: #c0392b;
-}
-
 /* Incoming orders in My Shop */
 .shop-order {
   background-color: #fff8e6;
@@ -567,10 +547,10 @@ footer {
 }
 
 .ship-btn {
-  width: 100%;
-  padding: 8px;
+  width: auto;
+  padding: 7px 14px;
   border: none;
-  border-radius: 8px;
+  border-radius: 16px;
   background-color: #0d6efd;
   color: white;
   font-weight: bold;
@@ -606,5 +586,118 @@ footer {
   font-size: 14px;
   font-weight: bold;
   cursor: pointer;
+}
+
+  /* ===== Return Goods Popup ===== */
+  #returnModal {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: rgba(0, 0, 0, 0.6);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+  }
+
+  #returnModal .modal-content {
+    background: white;
+    border-radius: 16px;
+    padding: 20px;
+    width: 90%;
+    max-width: 400px;
+    max-height: 85vh;
+    overflow-y: auto;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+  }
+
+  #returnModal h3 {
+    margin: 0 0 8px 0;
+    font-size: 20px;
+  }
+
+  #returnModal p {
+    font-size: 14px;
+    color: #555;
+    margin: 4px 0 12px 0;
+  }
+
+  #returnModal select,
+  #returnModal textarea {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    font-size: 14px;
+    box-sizing: border-box;
+    margin-bottom: 10px;
+    font-family: inherit;
+  }
+
+  #returnModal .btn-primary {
+    border: none;
+    border-radius: 25px;
+    padding: 12px;
+    font-size: 15px;
+    font-weight: bold;
+    cursor: pointer;
+  }
+
+  html, body {
+    overflow-x: hidden;
+  }
+.delete-btn,
+.confirm-btn,
+.return-btn,
+.ship-btn {
+  width: auto;
+  padding: 7px 14px;
+  border: none;
+  border-radius: 16px;
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+  font-size: 13px;
+}
+.order-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+  font-size: 15px;
+}
+
+.order-details {
+  display: none;
+  margin-top: 8px;
+}
+
+.chevron {
+  font-size: 14px;
+  color: #0d6efd;
+}
+/* Compact buttons inside order cards (beats .modal-body width) */
+.order-details button,
+.shop-actions button {
+  width: auto;
+}
+
+.sold-badge {
+  background-color: #d9534f;
+  color: white;
+  font-size: 11px;
+  font-weight: bold;
+  padding: 2px 8px;
+  border-radius: 10px;
+  margin-left: 4px;
+}
+.sold-badge {
+  background-color: #d9534f;
+  color: white;
+  font-size: 11px;
+  font-weight: bold;
+  padding: 2px 8px;
+  border-radius: 10px;
+  margin-left: 4px;
 }
 
