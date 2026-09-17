@@ -54,6 +54,7 @@
       <div class="card" onclick="filterCategory('👗 Fashion')">👗<br>Fashion</div>
       <div class="card" onclick="filterCategory('🪑 Home & Furniture')">🪑<br>Home & Furniture</div>
     </div>
+<div class="categories-more" onclick="openAllCategories()">See all 11 categories →</div>
 
     <h2>Hot Deals 🔥</h2>
 
@@ -81,7 +82,6 @@
         <div class="order-summary">
           <p><strong id="escrowItemName"></strong></p>
           <p id="escrowItemPrice"></p>
-          <p class="fee-row">Delivery fee: GH₵ 50</p>
           <hr>
           <p class="total-row">Total: <span id="escrowTotal"></span></p>
         </div>
@@ -141,10 +141,40 @@
   </div>
 </div>
 
+<!-- All Categories modal — hidden by default -->
+<div id="allCategoriesModal" class="modal">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h2>All Categories</h2>
+      <button class="close-btn" onclick="closeAllCategories()">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="categories">
+        <div class="card" onclick="pickCategory('📱 Phones & Tablets')">📱<br>Phones & Tablets</div>
+        <div class="card" onclick="pickCategory('🚗 Vehicles')">🚗<br>Vehicles</div>
+        <div class="card" onclick="pickCategory('🏠 Property')">🏠<br>Property</div>
+        <div class="card" onclick="pickCategory('💻 Electronics')">💻<br>Electronics</div>
+        <div class="card" onclick="pickCategory('👗 Fashion')">👗<br>Fashion</div>
+        <div class="card" onclick="pickCategory('🪑 Home & Furniture')">🪑<br>Home & Furniture</div>
+        <div class="card" onclick="pickCategory('🛠️ Services')">🛠️<br>Services</div>
+        <div class="card" onclick="pickCategory('🧸 Kids & Toys')">🧸<br>Kids & Toys</div>
+        <div class="card" onclick="pickCategory('📚 Books & Education')">📚<br>Books & Education</div>
+        <div class="card" onclick="pickCategory('💄 Health & Beauty')">💄<br>Health & Beauty</div>
+        <div class="card" onclick="pickCategory('🍔 Food & Beverages')">🍔<br>Food & Beverages</div>
+      </div>
+    </div>
+  </div>
+</div>
+
 <!-- Detail modal — hidden by default -->
 <div id="detailModal" class="modal">
   <div class="modal-content">
-    <div class="detail-photo" id="detailPhoto">📦</div>
+    <div class="detail-photo-wrap">
+  <div class="detail-photo" id="detailPhoto">📦</div>
+  <button class="carousel-arrow carousel-left" id="carouselLeft" onclick="prevPhoto()">◀</button>
+  <button class="carousel-arrow carousel-right" id="carouselRight" onclick="nextPhoto()">▶</button>
+  <div class="carousel-counter" id="carouselCounter"></div>
+</div>
 
     <div class="detail-body">
       <h2 id="detailName"></h2>
@@ -176,9 +206,9 @@
     <div class="modal-body">
       <!-- Photo upload -->
       <label class="photo-upload" for="itemPhoto">
-        <div id="photoPreview">📷</div>
-        <p>Add Photo</p>
-      </label>
+      <div id="photoPreview">📷</div>
+      <p>Add Photo <span id="photoCount" style="font-weight:normal;color:#666;"></span></p>
+</label>
       <input type="file" id="itemPhoto" accept="image/*" onchange="previewPhoto()" hidden>
 
       <input type="text" id="itemName" placeholder="What are you selling? e.g. iPhone 12">
@@ -198,6 +228,12 @@
         <option>👗 Fashion</option>
         <option>🪑 Home & Furniture</option>
         <option>🚗 Vehicles</option>
+        <option>🏠 Property</option>
+        <option>🛠️ Services</option>
+        <option>🧸 Kids & Toys</option>
+        <option>📚 Books & Education</option>
+        <option>💄 Health & Beauty</option>
+        <option>🍔 Food & Beverages</option>
       </select>
 
       <select id="itemCondition">
@@ -246,11 +282,20 @@
 
   <!-- Admin Dispute Panel (secret: tap logo 5x) -->
   <div id="adminPanel" style="display:none; padding:16px; max-width:100%; overflow-x:hidden;">
-    <h2>🧑‍⚖️ Marketa Admin — Disputes</h2>
-    <div id="adminDisputes"></div>
-    <br>
     <button class="filter-btn" onclick="closeAdmin()">← Back to Marketa</button>
+    <h2 style="margin-top:12px;">🧑‍⚖️ Marketa Admin — Disputes</h2>
+    <div id="adminDisputes"></div>
   </div>
+<div id="threadModal" class="modal">
+  <div class="modal-content">
+    <h2>⚖️ Evidence & Admin Chat</h2>
+    <div id="threadMessages" style="max-height:300px; overflow-y:auto; text-align:left;"></div>
+    <textarea id="threadInput" placeholder="Describe the issue or add a note..." style="width:100%; margin-top:10px;"></textarea>
+    <input type="file" id="threadImage" accept="image/*" style="margin-top:8px;">
+    <button class="btn-primary" onclick="sendThreadMessage()">📨 Send to Admin</button>
+    <button class="btn-secondary" onclick="closeThread()">Close</button>
+  </div>
+</div>
 
 </body>
 </html>
