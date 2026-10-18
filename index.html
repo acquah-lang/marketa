@@ -2,30 +2,58 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
- <title>Marketa — Buy & Sell Safely in Ghana</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Marketa - Buy & Sell Safely in Ghana</title>
   <link rel="stylesheet" href="style.css">
+  <link rel="manifest" href="manifest.json">
+<link rel="icon" type="image/png" href="icon.png">
+<link rel="apple-touch-icon" href="icon.png">
+<meta name="theme-color" content="#1B7F5C">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Marketa">
 </head>
 <body>
-
-  <header>
-    <h1 onclick="adminTap()">Marketa</h1>
+    
+<!-- PWA install banner (shown when installable) -->
+<div id="installBanner" class="install-banner" style="display:none;">
+  <div class="install-banner-text">
+    <strong>📲 Install Marketa</strong>
+    <span>Faster access, works offline, home screen icon</span>
+  </div>
+  <div class="install-banner-actions">
+    <button class="install-btn-accept" onclick="acceptInstall()">Install</button>
+    <button class="install-btn-dismiss" onclick="dismissInstall()">Not now</button>
+  </div>
+</div>
+    <header>
+    <button class="hamburger-btn" onclick="openDrawer()" aria-label="Menu">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+        <line x1="3" y1="6" x2="21" y2="6"></line>
+        <line x1="3" y1="12" x2="21" y2="12"></line>
+        <line x1="3" y1="18" x2="21" y2="18"></line>
+      </svg>
+    </button>
+   <h1 class="header-logo"><img src="icon.png" alt="Marketa"></h1>
+    <div id="headerAuthBtn" class="header-auth">
+  <button class="sign-in-btn" onclick="openAuthFromHeader()">Sign In</button>
+</div>
     <div class="controls">
-      <input type="text" id="searchBox" placeholder="What are you looking for?" oninput="applyFilters()">
-      <button onclick="searchListings()">Search</button>
-      <button class="filter-btn" onclick="toggleFilters()">
-  <svg width="20" height="20" viewBox="0 0 24 24" fill="white">
-    <path d="M3 4h18l-7 8v6l-4 2v-8L3 4z"/>
-  </svg>
-</button>
-    </div>
-<button class="orders-btn" onclick="openOrders()">📦</button>
-<button class="orders-btn" onclick="openShop()">🧑‍💼</button>
+  <button class="home-search-btn" onclick="openSearchPage()">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="11" cy="11" r="8"></circle>
+      <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+    </svg>
+    <span>Search products, sellers…</span>
+  </button>
+</div>
+    <div class="header-icons" style="display:none;">
+  <span id="messagesBadge" class="messages-badge" style="display:none;"></span>
+</div>
   </header>
 
   <main>
 
-    <!-- Filters — hidden until toggled or searched -->
     <section id="filterPanel" class="filters">
       <select id="filterCondition" onchange="applyFilters()">
         <option value="">Any condition</option>
@@ -33,32 +61,118 @@
         <option>Used</option>
         <option>Refurbished</option>
       </select>
-
       <input type="number" id="minPrice" placeholder="Min GH₵" oninput="applyFilters()">
       <input type="number" id="maxPrice" placeholder="Max GH₵" oninput="applyFilters()">
     </section>
 
-    <!-- Hero banner -->
-    <section class="hero">
-      <h2>Buy & Sell Safely in Ghana 🇬🇭</h2>
-      <p>Escrow-protected payments. Verified sellers. Zero wahala.</p>
-    </section>
-
-    <h2>Browse Categories</h2>
-
-        <div class="categories">
-      <div class="card" onclick="filterCategory('📱 Phones & Tablets')">📱<br>Phones & Tablets</div>
-      <div class="card" onclick="filterCategory('🚗 Vehicles')">🚗<br>Vehicles</div>
-      <div class="card" onclick="filterCategory('🏠 Property')">🏠<br>Property</div>
-      <div class="card" onclick="filterCategory('💻 Electronics')">💻<br>Electronics</div>
-      <div class="card" onclick="filterCategory('👗 Fashion')">👗<br>Fashion</div>
-      <div class="card" onclick="filterCategory('🪑 Home & Furniture')">🪑<br>Home & Furniture</div>
+<section class="hero">
+  <div class="hero-content">
+    <h2>Buy &amp; Sell Safely in <span class="hero-highlight">Ghana</span> 🇬🇭</h2>
+    <p>Your trusted marketplace for everything you need — from people nearby.</p>
+    <div class="hero-pill">
+      <span class="hero-pill-icon">🛡️</span>
+      <span>Escrow-protected payments</span>
     </div>
-<div class="categories-more" onclick="openAllCategories()">See all 11 categories →</div>
+  </div>
+  <!-- Filter shortcut -->
+<button class="hero-filter-btn" onclick="openBrowsePage()">
+  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;margin-right:6px;">
+    <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"></polygon>
+  </svg>
+  Filter Listings
+</button>
+  
+  <div class="hero-decoration" aria-hidden="true">
+    <span class="hero-blob hero-blob-1"></span>
+    <span class="hero-blob hero-blob-2"></span>
+    <span class="hero-blob hero-blob-3"></span>
+  </div>
+</section>
 
-    <h2>Hot Deals 🔥</h2>
+    <div class="section-header">
+      <h2>Browse Categories</h2>
+    </div>
+
+    <div class="categories">
+      <div class="card" onclick="filterCategory('📱 Phones & Tablets')">
+        <svg class="cat-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="5" y="2" width="14" height="20" rx="2.5"></rect>
+          <line x1="12" y1="18" x2="12" y2="18.01"></line>
+        </svg>
+        <div class="cat-label">Phones</div>
+      </div>
+      <div class="card" onclick="filterCategory('🚗 Vehicles')">
+        <svg class="cat-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M5 17H3v-4l2-5h14l2 5v4h-2"></path>
+          <circle cx="7.5" cy="17" r="2"></circle>
+          <circle cx="16.5" cy="17" r="2"></circle>
+        </svg>
+        <div class="cat-label">Cars</div>
+      </div>
+      <div class="card" onclick="filterCategory('💻 Electronics')">
+        <svg class="cat-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="3" y="4" width="18" height="12" rx="2"></rect>
+          <line x1="2" y1="20" x2="22" y2="20"></line>
+        </svg>
+        <div class="cat-label">Laptops</div>
+      </div>
+      <div class="card" onclick="filterCategory('👗 Fashion')">
+        <svg class="cat-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M16 3l4 3-2 3v11H6V9L4 6l4-3"></path>
+          <path d="M8 3a4 4 0 0 0 8 0"></path>
+        </svg>
+        <div class="cat-label">Fashion</div>
+      </div>
+      <div class="card" onclick="filterCategory('🏠 Property')">
+        <svg class="cat-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M3 11l9-8 9 8"></path>
+          <path d="M5 10v10h14V10"></path>
+          <path d="M10 20v-6h4v6"></path>
+        </svg>
+        <div class="cat-label">Property</div>
+      </div>
+      <div class="card" onclick="filterCategory('🪑 Home & Furniture')">
+        <svg class="cat-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M5 11V7a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v4"></path>
+          <path d="M3 11a2 2 0 0 1 2 2v3h14v-3a2 2 0 0 1 2-2"></path>
+          <line x1="6" y1="19" x2="6" y2="16"></line>
+          <line x1="18" y1="19" x2="18" y2="16"></line>
+        </svg>
+        <div class="cat-label">Furniture</div>
+      </div>
+      <div class="card" onclick="filterCategory('🐾 Pets & Animals')">
+        <svg class="cat-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <ellipse cx="6" cy="9" rx="1.5" ry="2"></ellipse>
+          <ellipse cx="10" cy="6" rx="1.5" ry="2"></ellipse>
+          <ellipse cx="14" cy="6" rx="1.5" ry="2"></ellipse>
+          <ellipse cx="18" cy="9" rx="1.5" ry="2"></ellipse>
+          <path d="M8 14c0-2.5 1.8-4 4-4s4 1.5 4 4c0 2.5-2 4-4 4s-4-1.5-4-4z"></path>
+        </svg>
+        <div class="cat-label">Pets</div>
+      </div>
+      <div class="card" onclick="openAllCategories()">
+        <svg class="cat-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="6" cy="12" r="1.2" fill="currentColor"></circle>
+          <circle cx="12" cy="12" r="1.2" fill="currentColor"></circle>
+          <circle cx="18" cy="12" r="1.2" fill="currentColor"></circle>
+        </svg>
+        <div class="cat-label">More</div>
+      </div>
+    </div>
+
+    <div class="section-header section-header-listings">
+  <h2 id="homeSectionTitle">🔥 Just Listed</h2>
+    <button class="view-all-btn" onclick="openBrowsePage()">
+    <span>View All</span>
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+      <line x1="5" y1="12" x2="19" y2="12"></line>
+      <polyline points="12 5 19 12 12 19"></polyline>
+    </svg>
+  </button>
+</div>
 
     <div id="filterBanner" style="display:none;"></div>
+    <div id="resultCount" style="display:none;"></div>
 
     <div class="listings">
     </div>
@@ -66,199 +180,1443 @@
     <div class="listings">
     </div>
 
-    </main>
+  </main>
 
-<!-- Escrow modal — hidden by default -->
-<div id="escrowModal" class="modal">
-  <div class="modal-content">
-    <div class="modal-header">
-      <h2>🔒 Escrow Checkout</h2>
-      <button class="close-btn" onclick="closeEscrow()">✕</button>
+  <!-- Support FAB — home page only -->
+  <button class="support-fab" onclick="openSupport()" title="Help & Support">
+  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="12" cy="12" r="10"></circle>
+      <path d="M9.5 9a2.5 2.5 0 0 1 5 0c0 1.5-2.5 1.5-2.5 3"></path>
+      <line x1="12" y1="17" x2="12" y2="17.01"></line>
+    </svg>
+  </button>
+
+<!-- ============================================
+     MY ORDERS PAGE (full-screen overlay)
+     ============================================ -->
+<div id="ordersModal" class="profile-page" style="display:none;">
+
+  <div class="page-shell">
+
+    <!-- Breadcrumb -->
+    <button class="page-back-link" onclick="closeOrders()">
+      <span class="page-back-arrow">←</span>
+      Back to account
+    </button>
+
+    <div class="page-breadcrumb">
+      <span>My account</span>
+      <span class="bc-sep">›</span>
+      <span class="bc-current">My orders</span>
     </div>
 
+    <!-- Title + subtext -->
+    <h1 class="page-title">My orders</h1>
+    <p class="page-subtitle">Track your escrow-protected purchases and confirm delivery when your item arrives.</p>
+
+    <!-- Stat cards — 3 across -->
+    <div class="orders-stats-grid">
+
+      <div class="orders-stat-card">
+        <div class="orders-stat-label">TOTAL ORDERS</div>
+        <div class="orders-stat-value" id="myOrdersTotal">0</div>
+      </div>
+
+      <div class="orders-stat-card">
+        <div class="orders-stat-label">ACTIVE ORDERS</div>
+        <div class="orders-stat-value green" id="myOrdersActive">0</div>
+      </div>
+
+      <div class="orders-stat-card amber">
+        <div class="orders-stat-label">HELD IN ESCROW</div>
+        <div class="orders-stat-value amber-text" id="myOrdersEscrow">GH₵ 0</div>
+      </div>
+
+    </div>
+
+    <!-- Tab pills — 2x2 grid -->
+    <div class="orders-tabs">
+      <button class="orders-tab active" data-tab="all" onclick="filterMyOrders('all')">All</button>
+      <button class="orders-tab" data-tab="active" onclick="filterMyOrders('active')">Active</button>
+      <button class="orders-tab" data-tab="attention" onclick="filterMyOrders('attention')">Needs attention</button>
+      <button class="orders-tab" data-tab="completed" onclick="filterMyOrders('completed')">Completed</button>
+    </div>
+
+    <!-- Orders list -->
+    <div id="myOrdersList" class="orders-list"></div>
+
+    <!-- Empty state -->
+    <div id="myOrdersEmpty" class="empty-state" style="display:none;">
+      <div class="empty-state-icon">📦</div>
+      <div class="empty-state-title" id="myOrdersEmptyTitle">You have no orders yet</div>
+      <div class="empty-state-text" id="myOrdersEmptyText">When you buy an item with escrow protection, it will show up here so you can track it from payment to delivery.</div>
+      <button class="shop-empty-btn" onclick="closeOrders(); openBrowsePage();">Browse listings</button>
+    </div>
+
+  </div>
+
+</div>
+
+<!-- ============================================
+     MY LISTINGS PAGE (full-screen overlay)
+     ============================================ -->
+<div id="listingsModal" class="profile-page" style="display:none;">
+
+  <div class="page-shell">
+
+    <!-- Breadcrumb: back link + trail -->
+    <button class="page-back-link" onclick="closeMyListings()">
+      <span class="page-back-arrow">←</span>
+      Back to account
+    </button>
+
+    <div class="page-breadcrumb">
+      <span>My account</span>
+      <span class="bc-sep">›</span>
+      <span class="bc-current">My listings</span>
+    </div>
+
+    <!-- Title + subtext -->
+    <h1 class="page-title">My listings</h1>
+    <p class="page-subtitle">Manage the ads you have posted on Marketa.</p>
+
+    <!-- Primary action -->
+    <button class="page-primary-btn" onclick="closeMyListings(); requireLogin('post a listing', toggleSellPage);">
+      <span style="font-size:18px;line-height:1;">+</span>
+      Post a new ad
+    </button>
+
+<!-- Select mode bar -->
+<div id="myListingsSelectBar" class="my-listings-select-bar">
+  <span id="myListingsSelCount" class="my-listings-sel-count" style="display:none;">0 selected</span>
+  <button id="myListingsSelectAllBtn" class="my-listings-select-all" onclick="myListingsSelectAll()" style="display:none;">Select all</button>
+  <button id="myListingsSelectBtn" class="my-listings-select-toggle" onclick="toggleMyListingsSelectMode()">
+    <span id="myListingsSelectIcon">☑️</span>
+    <span id="myListingsSelectLabel">Select</span>
+  </button>
+</div>
+
+<!-- Floating action bar (appears when items are selected) -->
+<div id="myListingsActionBar" class="my-listings-action-bar" style="display:none;">
+  <button id="mlActionSold" class="ml-action-btn" onclick="myListingsBulkMarkSold()">
+    <span class="ml-action-icon">📦</span>
+    <span>Mark Sold</span>
+  </button>
+  <button id="mlActionRelist" class="ml-action-btn" onclick="myListingsBulkRelist()">
+    <span class="ml-action-icon">↻</span>
+    <span>Relist</span>
+  </button>
+  <button id="mlActionDelete" class="ml-action-btn ml-action-danger" onclick="myListingsBulkDelete()">
+    <span class="ml-action-icon">🗑</span>
+    <span>Delete</span>
+  </button>
+</div>
+
+    <!-- Stat cards — 3 across -->
+    <div class="listing-stats-grid">
+
+      <div class="listing-stat-card">
+        <div class="listing-stat-label">TOTAL ADS</div>
+        <div class="listing-stat-value" id="myListingsTotal">0</div>
+      </div>
+
+      <div class="listing-stat-card">
+        <div class="listing-stat-label">ACTIVE</div>
+        <div class="listing-stat-value green" id="myListingsActive">0</div>
+      </div>
+
+      <div class="listing-stat-card">
+        <div class="listing-stat-label">SOLD</div>
+        <div class="listing-stat-value" id="myListingsSold">0</div>
+      </div>
+
+    </div>
+
+    <!-- Tab pills -->
+    <div class="my-listings-tabs">
+      <button class="my-listings-tab active" data-tab="all" onclick="filterMyListings('all')">All</button>
+      <button class="my-listings-tab" data-tab="active" onclick="filterMyListings('active')">Active</button>
+      <button class="my-listings-tab" data-tab="sold" onclick="filterMyListings('sold')">Sold</button>
+<button class="my-listings-tab" data-tab="removed" onclick="filterMyListings('removed')">Removed</button>
+    </div>
+
+    <!-- Listings grid -->
+    <div id="myListingsGrid" class="my-listings-grid"></div>
+
+    <!-- Empty state -->
+    <div id="myListingsEmpty" class="empty-state" style="display:none;">
+      <div class="empty-state-icon">📋</div>
+      <div class="empty-state-title">No listings yet</div>
+      <div class="empty-state-text">Your posted ads will appear here.<br>Tap "Post a new ad" to get started.</div>
+    </div>
+
+  </div>
+
+</div>
+
+<!-- ============================================
+     DASHBOARD PAGE (full-screen overlay)
+     ============================================ -->
+<div id="dashboardPage" class="profile-page" style="display:none;">
+
+  <div class="page-shell">
+
+    <!-- Breadcrumb -->
+    <button class="page-back-link" onclick="closeDashboard()">
+      <span class="page-back-arrow">←</span>
+      Back to account
+    </button>
+
+    <div class="page-breadcrumb">
+      <span>My account</span>
+      <span class="bc-sep">›</span>
+      <span class="bc-current">Dashboard</span>
+    </div>
+
+    <!-- Title + subtext -->
+    <h1 class="page-title">Dashboard</h1>
+    <p class="page-subtitle">How your selling is going — revenue, best listings, and a quick snapshot of your shop.</p>
+
+    <!-- Revenue snapshot -->
+    <h2 class="dash-section-title">Revenue</h2>
+    <div class="dash-revenue-grid" id="dashRevenueGrid">
+      <div class="dash-revenue-card">
+        <div class="dash-revenue-label">TOTAL EARNED</div>
+        <div class="dash-revenue-value" id="dashTotalEarned">GH₵ 0</div>
+      </div>
+      <div class="dash-revenue-card">
+        <div class="dash-revenue-label">THIS MONTH</div>
+        <div class="dash-revenue-value green" id="dashThisMonth">GH₵ 0</div>
+      </div>
+      <div class="dash-revenue-card amber">
+        <div class="dash-revenue-label">IN ESCROW</div>
+        <div class="dash-revenue-value amber-text" id="dashInEscrow">GH₵ 0</div>
+      </div>
+      <div class="dash-revenue-card">
+        <div class="dash-revenue-label">PENDING ORDERS</div>
+        <div class="dash-revenue-value" id="dashPendingCount">0</div>
+      </div>
+    </div>
+
+<!-- Sales chart (last 30 days) -->
+<h2 class="dash-section-title">Sales (last 30 days)</h2>
+<p class="dash-section-sub" id="dashSalesTotalLine">—</p>
+<div id="dashSalesChart" class="dash-sales-chart"></div>
+<div id="dashSalesEmpty" class="empty-state" style="display:none;padding:30px 20px;">
+  <div class="empty-state-icon">📊</div>
+  <div class="empty-state-title">No sales yet</div>
+  <div class="empty-state-text">Once you complete a sale, your daily earnings will appear here.</div>
+</div>
+
+    <!-- Top listings -->
+    <h2 class="dash-section-title">Top listings</h2>
+    <p class="dash-section-sub">Your best performers by revenue earned.</p>
+    <div id="dashTopListings" class="dash-top-listings"></div>
+    <div id="dashTopEmpty" class="empty-state" style="display:none;">
+      <div class="empty-state-icon">📈</div>
+      <div class="empty-state-title">No sales yet</div>
+      <div class="empty-state-text">Once you complete your first order, your best listings will show up here.</div>
+    </div>
+
+    <!-- Quick stats -->
+    <h2 class="dash-section-title">Quick stats</h2>
+    <div class="dash-stats-grid" id="dashStatsGrid">
+      <div class="dash-stat-card">
+        <div class="dash-stat-label">TOTAL VIEWS</div>
+        <div class="dash-stat-value" id="dashTotalViews">0</div>
+      </div>
+      <div class="dash-stat-card">
+        <div class="dash-stat-label">ORDERS RECEIVED</div>
+        <div class="dash-stat-value" id="dashTotalOrders">0</div>
+      </div>
+      <div class="dash-stat-card">
+        <div class="dash-stat-label">AVG ORDER VALUE</div>
+        <div class="dash-stat-value" id="dashAvgOrder">GH₵ 0</div>
+      </div>
+      <div class="dash-stat-card">
+        <div class="dash-stat-label">YOUR RATING</div>
+        <div class="dash-stat-value" id="dashRating">—</div>
+      </div>
+    </div>
+
+  </div>
+
+</div>
+
+<!-- ============================================
+     MY SHOP PAGE (full-screen overlay)
+     ============================================ -->
+<div id="shopModal" class="profile-page" style="display:none;">
+
+  <div class="page-shell">
+
+    <!-- Breadcrumb -->
+    <button class="page-back-link" onclick="closeShop()">
+      <span class="page-back-arrow">←</span>
+      Back to account
+    </button>
+
+    <div class="page-breadcrumb">
+      <span>My account</span>
+      <span class="bc-sep">›</span>
+      <span class="bc-current">My shop</span>
+    </div>
+
+    <!-- Title + subtext -->
+    <h1 class="page-title">My shop</h1>
+    <p class="page-subtitle">Your selling dashboard — incoming orders, shipping, and your listings at a glance.</p>
+    
+    <!-- Link to full dashboard -->
+<button class="shop-dash-link" onclick="closeShop(); openDashboard();">
+  <span>📊</span>
+  <span>View full dashboard</span>
+  <span class="shop-dash-arrow">→</span>
+</button>
+
+    <!-- Stat cards — 2x2 grid -->
+    <div class="shop-stats-grid">
+
+      <div class="shop-stat-card">
+        <div class="shop-stat-label">ACTIVE LISTINGS</div>
+        <div class="shop-stat-value" id="shopActiveCount">0</div>
+      </div>
+
+      <div class="shop-stat-card">
+        <div class="shop-stat-label">SOLD</div>
+        <div class="shop-stat-value" id="shopSoldCount">0</div>
+      </div>
+
+      <div class="shop-stat-card">
+        <div class="shop-stat-label">ORDERS RECEIVED</div>
+        <div class="shop-stat-value" id="shopOrdersCount">0</div>
+      </div>
+
+      <div class="shop-stat-card amber">
+        <div class="shop-stat-label">FUNDS IN ESCROW</div>
+        <div class="shop-stat-value amber-text" id="shopEscrowFunds">GH₵ 0</div>
+      </div>
+
+    </div>
+
+    <!-- Incoming orders section -->
+    <h2 class="shop-section-title">Incoming orders</h2>
+    <p class="shop-section-subtitle">Ship promptly to keep your buyers happy. Funds are released to you once they confirm delivery.</p>
+
+    <!-- Tab pills -->
+    <div class="shop-tabs">
+      <button class="shop-tab active" data-tab="needsAction" onclick="filterMyShopOrders('needsAction')">Needs action</button>
+      <button class="shop-tab" data-tab="all" onclick="filterMyShopOrders('all')">All orders</button>
+      <button class="shop-tab" data-tab="completed" onclick="filterMyShopOrders('completed')">Completed</button>
+    </div>
+
+    <!-- Order cards -->
+    <div id="shopOrdersList" class="shop-orders-list"></div>
+
+    <!-- Empty state -->
+    <div id="shopOrdersEmpty" class="empty-state" style="display:none;">
+      <div class="empty-state-icon">📥</div>
+      <div class="empty-state-title" id="shopEmptyTitle">No orders waiting to ship</div>
+      <div class="empty-state-text" id="shopEmptyText">You're all caught up. New orders that need shipping will appear here.</div>
+      <button class="shop-empty-btn" onclick="closeShop(); requireLogin('see your listings', openMyListings);">Manage my listings</button>
+    </div>
+
+  </div>
+
+</div>
+
+<!-- ============================================
+     CHECKOUT PAGE (full-screen overlay)
+     ============================================ -->
+<div id="checkoutPage" class="profile-page" style="display:none;">
+  <div class="page-shell">
+
+    <!-- Breadcrumb -->
+    <button class="page-back-link" onclick="closeCheckout()">
+      <span class="page-back-arrow">←</span>
+      Back
+    </button>
+    <div class="page-breadcrumb">
+      <span>Home</span>
+      <span class="bc-sep">›</span>
+      <span id="checkoutCrumbItem">Listing</span>
+      <span class="bc-sep">›</span>
+      <span class="bc-current">Secure checkout</span>
+    </div>
+
+    <!-- Title block -->
+    <div class="checkout-title-row">
+      <div class="checkout-shield-icon">🛡️</div>
+      <div>
+        <h1 class="checkout-title">Marketa escrow checkout</h1>
+        <p class="checkout-subtitle">Your money is held safely by Marketa and only released to the seller once you confirm you received exactly what you ordered.</p>
+      </div>
+    </div>
+
+    <!-- Delivery mode card -->
+    <div class="page-card">
+      <h2 class="checkout-section-title">How should you receive it?</h2>
+
+      <label class="checkout-mode-option selected" data-mode="meetup">
+        <input type="radio" name="deliveryMode" value="meetup" checked>
+        <div class="checkout-mode-body">
+          <div class="checkout-mode-name">🤝 Meet-up in person</div>
+          <div class="checkout-mode-sub">Agree on a safe public place with the seller</div>
+        </div>
+        <div class="checkout-mode-check">◉</div>
+      </label>
+
+      <label class="checkout-mode-option" data-mode="delivery">
+        <input type="radio" name="deliveryMode" value="delivery">
+        <div class="checkout-mode-body">
+          <div class="checkout-mode-name">🚚 Door delivery</div>
+          <div class="checkout-mode-sub">Seller arranges delivery to your address</div>
+        </div>
+        <div class="checkout-mode-check">◯</div>
+      </label>
+
+      <label class="checkout-mode-option" data-mode="pickup">
+        <input type="radio" name="deliveryMode" value="pickup">
+        <div class="checkout-mode-body">
+          <div class="checkout-mode-name">📦 Pickup station</div>
+          <div class="checkout-mode-sub">Collect from a nearby pickup point</div>
+        </div>
+        <div class="checkout-mode-check">◯</div>
+      </label>
+
+      <label for="checkoutAddress" id="checkoutAddressLabel" class="sell-field-label" style="margin-top:16px;">Delivery address or meet-up area</label>
+<input type="text" id="checkoutAddress" placeholder="e.g. Osu, Oxford Street — near the mall">
+
+      <label class="sell-field-label">Note for the seller (optional)</label>
+      <textarea id="checkoutNote" rows="3" placeholder="Let the seller know anything important about this order..."></textarea>
+    </div>
+
+    <!-- Order summary card -->
+    <div class="page-card">
+      <h2 class="checkout-section-title">Order summary</h2>
+      <div id="checkoutSummary" class="checkout-summary"></div>
+    </div>
+
+    <!-- Amber info banner -->
+    <div class="checkout-info-banner">
+      🔒 <strong>Your payment is protected.</strong> Funds stay with Marketa until you confirm delivery, then are released to the seller.
+    </div>
+
+    <!-- Pay button -->
+    <button class="checkout-pay-btn" id="checkoutPayBtn" onclick="submitCheckout()">
+      <span class="checkout-pay-shield">🛡️</span> Pay into escrow
+    </button>
+    <p class="checkout-footnote">Simulated escrow — no real money moves yet.</p>
+
+    <!-- What happens next -->
+    <div class="page-card" style="margin-top:20px;">
+      <h2 class="checkout-section-title">✅ What happens next</h2>
+      <ol class="checkout-steps">
+        <li>
+          <strong>You pay into escrow.</strong>
+          Marketa holds the funds — the seller never gets them yet.
+        </li>
+        <li>
+          <strong>The seller ships.</strong>
+          They have 4 days to send the item or the order cancels.
+        </li>
+        <li>
+          <strong>You confirm &amp; release.</strong>
+          Once happy, funds are released. Not happy? Raise a dispute or request a return.
+        </li>
+      </ol>
+    </div>
+
+  </div>
+</div>
+
+
+<!-- ============================================
+     MESSAGES PAGE (full-screen overlay)
+     ============================================ -->
+<div id="messagesModal" class="profile-page" style="display:none;">
+
+  <div class="page-shell">
+
+    <!-- Breadcrumb -->
+    <button class="page-back-link" onclick="closeMessages()">
+      <span class="page-back-arrow">←</span>
+      Back to account
+    </button>
+
+    <div class="page-breadcrumb">
+      <span>My account</span>
+      <span class="bc-sep">›</span>
+      <span class="bc-current">Messages</span>
+    </div>
+
+    <!-- Title + subtext -->
+    <h1 class="page-title">Messages</h1>
+    <p class="page-subtitle">Chat directly with buyers and sellers — keep every deal inside Marketa.</p>
+
+    <!-- Tabs — 3 across -->
+    <div class="messages-tabs">
+      <button class="messages-tab active" data-tab="all" onclick="filterMyMessages('all')">All</button>
+      <button class="messages-tab" data-tab="buying" onclick="filterMyMessages('buying')">Buying</button>
+      <button class="messages-tab" data-tab="selling" onclick="filterMyMessages('selling')">Selling</button>
+    </div>
+
+    <!-- Conversation list -->
+    <div id="messagesList" class="messages-list"></div>
+
+    <!-- Empty state -->
+    <div id="noMessages" class="empty-state" style="display:none;">
+      <div class="empty-state-icon">💬</div>
+      <div class="empty-state-title" id="messagesEmptyTitle">No messages yet</div>
+      <div class="empty-state-text" id="messagesEmptyText">Chat with a seller from any listing — your conversations will appear here.</div>
+    </div>
+
+  </div>
+
+</div>
+
+<!-- Auth modal — signup / login -->
+<div id="authModal" class="modal">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h2 id="authTitle">Welcome to Marketa</h2>
+      <button class="close-btn" onclick="closeAuth()">✕</button>
+    </div>
     <div class="modal-body">
-      <!-- Step 1: Order summary -->
-      <div id="escrowStep1">
-        <div class="order-summary">
-          <p><strong id="escrowItemName"></strong></p>
-          <p id="escrowItemPrice"></p>
-          <hr>
-          <p class="total-row">Total: <span id="escrowTotal"></span></p>
+
+      <!-- Loading state -->
+      <div id="authLoading" style="text-align:center;padding:20px;">
+        <p style="color:#666;">Loading…</p>
+      </div>
+
+      <!-- Signup / login forms -->
+<div id="authForms" style="display:none;">
+  <input type="text" id="authDisplayName" placeholder="Your name (e.g. Alfred)">
+
+  <input type="email" id="authEmail" placeholder="Email address">
+  <div class="password-wrap">
+  <input type="password" id="authPassword" placeholder="Password (min 6 characters)">
+  <span class="password-toggle" onclick="togglePasswordVisibility()">👁</span>
+</div>
+
+  <div id="authError" style="color:#d9534f;font-size:13px;margin:6px 0;display:none;"></div>
+
+  <button class="buy-btn" id="authSubmitBtn" onclick="submitAuth()">Create account</button>
+
+  <p style="font-size:13px;color:#666;text-align:center;margin-top:16px;">
+    <span id="authSwitchText">Already have an account?</span>
+    <a href="#" id="authSwitchLink" onclick="switchAuthTab(); return false;" style="color:var(--green-main);font-weight:bold;">Log in</a>
+  </p>
+
+  <p style="font-size:11px;color:#999;text-align:center;margin-top:12px;">
+    By signing up you agree to our terms. We never share your data.
+  </p>
+</div>
+
+    </div>
+  </div>
+</div>
+
+<!-- ============================================
+     NEW SUPPORT TICKET — form modal
+     ============================================ -->
+<div id="newTicketModal" class="modal" style="display:none;">
+  <div class="modal-content" style="max-width: 420px;">
+    <div class="modal-header">
+      <h2>✏️ New support ticket</h2>
+      <button class="close-btn" onclick="closeNewTicketForm()">✕</button>
+    </div>
+    
+    <div class="modal-body">
+
+      <p style="font-size:13px;color:var(--text-gray);line-height:1.5;margin-bottom:16px;">
+        Tell us what's going on and we'll reply in the app. For urgent safety issues, please call us instead.
+      </p>
+
+      <!-- Category -->
+      <label class="ticket-field-label">What's this about?</label>
+      <div id="ticketCategoryList" class="ticket-categories"></div>
+
+      <!-- Subject -->
+      <label class="ticket-field-label" for="ticketSubject">Subject</label>
+      <input type="text" id="ticketSubject" maxlength="80" placeholder="A short summary (e.g. Order never arrived)">
+
+      <!-- Description -->
+      <label class="ticket-field-label" for="ticketDescription">Description</label>
+      <textarea id="ticketDescription" rows="5" maxlength="1000" placeholder="Tell us what happened. The more detail, the faster we can help."></textarea>
+      <div id="ticketDescCounter" class="ticket-counter">0/1000</div>
+
+      <!-- Screenshot (optional) -->
+      <label class="ticket-field-label">Screenshot <span class="ticket-optional">(optional)</span></label>
+      <label for="ticketImage" class="ticket-photo-upload">
+        <div id="ticketPhotoPreview">📷</div>
+        <p>Add a photo</p>
+      </label>
+      <input type="file" id="ticketImage" accept="image/*" onchange="previewTicketPhoto()" hidden>
+
+      <div id="ticketError" class="ticket-error" style="display:none;"></div>
+
+      <button class="buy-btn" style="margin-top:12px;" onclick="submitNewTicket()">Submit ticket</button>
+      <button style="width:100%;margin-top:8px;background:none;border:none;color:var(--text-gray);font-size:14px;cursor:pointer;" onclick="closeNewTicketForm()">Cancel</button>
+
+    </div>
+  </div>
+</div>
+
+<!-- ============================================
+     MY TICKETS — full-screen page
+     ============================================ -->
+<div id="myTicketsPage" class="profile-page" style="display:none;">
+
+  <div class="page-shell">
+
+    <button class="page-back-link" onclick="closeMyTickets()">
+      <span class="page-back-arrow">←</span>
+      Back to support
+    </button>
+
+    <div class="page-breadcrumb">
+      <span>Support</span>
+      <span class="bc-sep">›</span>
+      <span class="bc-current">My tickets</span>
+    </div>
+
+    <h1 class="page-title">My tickets</h1>
+    <p class="page-subtitle">Your conversations with the Marketa team. Tap any ticket to see replies.</p>
+
+    <!-- Filter pills -->
+    <div class="tickets-tabs">
+      <button class="tickets-tab active" data-tab="all" onclick="filterMyTickets('all')">All</button>
+      <button class="tickets-tab" data-tab="open" onclick="filterMyTickets('open')">Open</button>
+      <button class="tickets-tab" data-tab="resolved" onclick="filterMyTickets('resolved')">Resolved</button>
+    </div>
+
+    <div id="myTicketsList" class="tickets-list"></div>
+
+    <div id="myTicketsEmpty" class="empty-state" style="display:none;">
+      <div class="empty-state-icon">🎫</div>
+      <div class="empty-state-title">No tickets yet</div>
+      <div class="empty-state-text">When you open a support ticket, it will appear here so you can follow along.</div>
+      <button class="shop-empty-btn" onclick="closeMyTickets(); openNewTicketForm();">Open a ticket</button>
+    </div>
+
+  </div>
+
+</div>
+
+<!-- ============================================
+     TICKET DETAIL — full-screen page
+     ============================================ -->
+<div id="ticketDetailPage" class="profile-page" style="display:none;">
+
+  <div class="page-shell" style="padding-bottom: 130px;">
+
+    <button class="page-back-link" onclick="closeTicketDetail()">
+      <span class="page-back-arrow">←</span>
+      Back to tickets
+    </button>
+
+    <div class="page-breadcrumb">
+      <span>Support</span>
+      <span class="bc-sep">›</span>
+      <span class="bc-current">Ticket</span>
+    </div>
+
+    <!-- Ticket header card -->
+    <div class="ticket-detail-header">
+      <div class="ticket-detail-top">
+        <span class="ticket-row-cat" id="ticketDetailCat">🎫 Ticket</span>
+        <span class="ticket-row-status" id="ticketDetailStatus">Open</span>
+      </div>
+      <div class="ticket-detail-subject" id="ticketDetailSubject">—</div>
+      <div class="ticket-detail-meta" id="ticketDetailMeta">—</div>
+    </div>
+
+    <!-- Conversation thread -->
+    <div id="ticketDetailMessages" class="ticket-detail-messages"></div>
+
+    <!-- Resolved notice (shows when ticket is closed) -->
+    <div id="ticketDetailClosed" class="ticket-detail-closed" style="display:none;">
+      ✅ <strong>This ticket is resolved.</strong> Open a new ticket if you need more help.
+    </div>
+
+    <!-- Resolve button (only for open tickets) -->
+    <button id="ticketResolveBtn" class="ticket-resolve-btn" onclick="markTicketResolved()">
+      ✅ Mark as resolved
+    </button>
+
+    <!-- Reply box (fixed at the bottom) -->
+    <div id="ticketDetailReplyBar" class="ticket-reply-bar" style="display:none;">
+      <textarea id="ticketReplyInput" placeholder="Write a reply..." rows="1"></textarea>
+      <button class="ticket-reply-send" onclick="sendTicketReply()">Send ▸</button>
+    </div>
+
+  </div>
+
+</div>
+
+  <!-- Support modal -->
+  <div id="supportModal" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2>🆘 Help & Support</h2>
+        <button class="close-btn" onclick="closeSupport()">✕</button>
+      </div>
+      <div class="modal-body">
+          <!-- Support tickets — new primary action -->
+<div class="support-ticket-hero">
+  <div class="support-ticket-hero-icon">🎫</div>
+  <div class="support-ticket-hero-text">
+    <div class="support-ticket-hero-title">Need a hand?</div>
+    <div class="support-ticket-hero-sub">Open a ticket and our team will reply in the app.</div>
+  </div>
+</div>
+<button class="support-ticket-open-btn" onclick="openNewTicketForm()">
+  <span>✏️</span>
+  <span>Open a ticket</span>
+</button>
+<button class="support-ticket-view-btn" onclick="openMyTickets()">
+  <span>📋</span>
+  <span>My tickets</span>
+  <span id="myTicketsBadge" class="support-ticket-badge" style="display:none;">0</span>
+</button>
+       <h3 class="support-section-title">Buying &amp; Escrow</h3>
+<div class="faq-list">
+  <details class="faq-item">
+    <summary>How does escrow protect me?</summary>
+    <p>When you buy, your money is held safely by Marketa — the seller never receives it up front. Funds are only released to the seller after you confirm you received exactly what you ordered.</p>
+  </details>
+  <details class="faq-item">
+    <summary>What happens after I pay?</summary>
+    <p>Your money is held in escrow. The seller has 5 days to ship the item. Once shipped, you have 7 days to confirm delivery. If the seller doesn't ship in time, you're automatically refunded.</p>
+  </details>
+  <details class="faq-item">
+    <summary>What if the item doesn't match the description?</summary>
+    <p>From "My Orders", tap <strong>Request Return</strong> and pick a reason. The seller will be notified. If you can't agree, tap <strong>Escalate to Admin</strong> and our team will rule on the dispute.</p>
+  </details>
+  <details class="faq-item">
+    <summary>How long does a refund take?</summary>
+    <p>Once a refund is approved (either by the seller or by an admin ruling), funds are returned from escrow immediately. Bank settlement typically takes 1–3 business days.</p>
+  </details>
+  <details class="faq-item">
+    <summary>What if the seller never ships?</summary>
+    <p>You're fully protected. If the seller doesn't mark the order as shipped within 5 days of your payment, the order auto-cancels and your money is returned to you.</p>
+  </details>
+  <details class="faq-item">
+    <summary>Can I extend a deadline?</summary>
+    <p>Yes — both buyers and sellers get one extension per order. Sellers can add 2 days to the ship deadline; buyers can add 3 days to the confirm deadline. The option appears in the order card when 24 hours or less remain.</p>
+  </details>
+</div>
+
+<h3 class="support-section-title">Selling &amp; Listings</h3>
+<div class="faq-list">
+  <details class="faq-item">
+    <summary>How do I post a listing?</summary>
+    <p>Tap <strong>Sell</strong> in the bottom bar, choose a category, add up to 3 photos, set your price, quantity and location, then publish. Your ad appears instantly on the homepage.</p>
+  </details>
+  <details class="faq-item">
+    <summary>Can I edit a listing after posting?</summary>
+    <p>Yes — open <strong>My Listings</strong> and tap <strong>Edit</strong>. Note: if the listing has an active order, it can't be edited until the order is finished.</p>
+  </details>
+  <details class="faq-item">
+    <summary>What happens when I sell all my stock?</summary>
+    <p>When a listing's quantity reaches zero, it's automatically marked as Sold and removed from the public marketplace. You can always <strong>Relist</strong> it from My Listings if you get more stock.</p>
+  </details>
+  <details class="faq-item">
+    <summary>Why was my listing removed?</summary>
+    <p>A listing is removed when another user reports it and our moderation team confirms it broke our rules — for example, a prohibited item, a scam, or misleading photos. You'll see a <strong>Removed</strong> badge on the listing in My Listings.</p>
+  </details>
+  <details class="faq-item">
+    <summary>Can I appeal a removal?</summary>
+    <p>Yes. Contact us via the email or WhatsApp below with the listing name and reason. If the removal was a mistake, the listing will be restored.</p>
+  </details>
+</div>
+
+<h3 class="support-section-title">Reports &amp; Moderation</h3>
+<div class="faq-list">
+  <details class="faq-item">
+    <summary>How do I report a listing or a user?</summary>
+    <p>Open any listing and tap <strong>Report this listing</strong> at the bottom of the seller section. Pick a reason, add details if you'd like, and submit. Reports are reviewed by our moderation team.</p>
+  </details>
+  <details class="faq-item">
+    <summary>What happens after I report something?</summary>
+    <p>A moderator reviews the report. Depending on the outcome, the listing may be <strong>removed</strong>, the report may be <strong>dismissed</strong> (if no rules were broken), or further action may be taken against the account.</p>
+  </details>
+  <details class="faq-item">
+    <summary>What happens if I submit a false report?</summary>
+    <p>We review reports carefully. Accounts that repeatedly submit false or malicious reports may be <strong>restricted from using the report feature</strong>, or in serious cases, <strong>suspended</strong>.</p>
+  </details>
+  <details class="faq-item">
+    <summary>What are the rules of Marketa?</summary>
+    <p>No prohibited or illegal items. No scams, fakes, or misleading listings. No harassment or impersonation. Sellers must ship what they describe. Buyers must confirm receipt honestly. Breaking these rules can lead to listings being removed and accounts being restricted.</p>
+  </details>
+</div>
+
+<h3 class="support-section-title">Account &amp; Bans</h3>
+<div class="faq-list">
+  <details class="faq-item">
+    <summary>What can get my account restricted or banned?</summary>
+    <p>Serious or repeated rule-breaking. Examples: running scams, selling illegal items, repeatedly filing false reports, or refusing to complete orders. Depending on the severity, we may issue a warning, restrict certain features, or permanently ban the account.</p>
+  </details>
+  <details class="faq-item">
+    <summary>What happens to my escrow funds if I'm banned?</summary>
+    <p>Funds already held in escrow for legitimate in-progress orders are resolved fairly — buyers are refunded, and sellers are paid for orders that were delivered and confirmed. Any funds tied to fraudulent activity may be frozen pending review.</p>
+  </details>
+  <details class="faq-item">
+    <summary>Can I appeal a ban?</summary>
+    <p>Yes. Contact us via email or WhatsApp with your account email and a brief explanation. Our team will review the decision. Not all appeals are successful, but every appeal is read.</p>
+  </details>
+  <details class="faq-item">
+    <summary>How do I delete my account?</summary>
+    <p>Open <strong>Mine</strong> → <strong>Settings</strong> → <strong>Delete Account</strong>. Note that you must have no active orders or disputes. Deletion is permanent and removes your listings, orders, chats and reviews.</p>
+  </details>
+</div>
+
+<h3 class="support-section-title">Privacy &amp; Safety</h3>
+<div class="faq-list">
+  <details class="faq-item">
+    <summary>Is my personal information safe?</summary>
+    <p>Your phone number is only shown to someone buying from you — and only when they tap "Show phone number". Your email is never visible to other users. We never share your data with third parties.</p>
+  </details>
+  <details class="faq-item">
+    <summary>How do I stay safe when meeting a seller?</summary>
+    <p>Meet in a safe, public place during daytime. Inspect the item before paying. Keep the conversation and payment inside Marketa — never send money outside the platform. If something feels off, cancel the deal.</p>
+  </details>
+ <details class="faq-item">
+  <summary>What does the "Verified" badge mean?</summary>
+  <p>The ✓ Verified badge is awarded by the Marketa team to sellers we trust. These are sellers who've completed real sales and built a good track record on the platform. It's our way of helping buyers spot reliable people to deal with. If you're a seller who's been actively selling, you may be verified automatically as we grow.</p>
+</details>
+</div>
+
+        <h3 class="support-section-title" style="margin-top:20px;">Contact Us</h3>
+        <div class="contact-list">
+          <a class="contact-row" href="mailto:support@marketa.gh">
+            <span class="contact-icon">✉️</span>
+            <span class="contact-text">
+              <strong>Email</strong>
+              <span>support@marketa.gh</span>
+            </span>
+          </a>
+          <a class="contact-row" href="tel:+233200000000">
+            <span class="contact-icon">📞</span>
+            <span class="contact-text">
+              <strong>Phone</strong>
+              <span>+233 20 000 0000</span>
+            </span>
+          </a>
+          <a class="contact-row" href="https://wa.me/233200000000" target="_blank" rel="noopener">
+            <span class="contact-icon">💬</span>
+            <span class="contact-text">
+              <strong>WhatsApp</strong>
+              <span>Chat with us</span>
+            </span>
+          </a>
         </div>
 
-        <input type="tel" id="buyerPhone" placeholder="Your phone number e.g. 024 4567">
-        <input type="text" id="buyerLocation" placeholder="Delivery location e.g. Kumasi, Asokwa">
+        <p class="support-footer-note">In-app support chat is coming soon. 🚀</p>
+      </div>
+    </div>
+  </div>
 
-        <div class="escrow-note">
-          ✅ Your money is held safely by Marketa. The seller only gets paid AFTER you confirm delivery.
+  <!-- All Categories modal -->
+  <div id="allCategoriesModal" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2>All Categories</h2>
+        <button class="close-btn" onclick="closeAllCategories()">✕</button>
+      </div>
+      <div class="modal-body">
+        <div class="categories">
+          <div class="card" onclick="pickCategory('📱 Phones & Tablets')">
+            <svg class="cat-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="5" y="2" width="14" height="20" rx="2.5"></rect>
+              <line x1="12" y1="18" x2="12" y2="18.01"></line>
+            </svg>
+            <div class="cat-label">Phones</div>
+          </div>
+          <div class="card" onclick="pickCategory('🚗 Vehicles')">
+            <svg class="cat-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M5 17H3v-4l2-5h14l2 5v4h-2"></path>
+              <circle cx="7.5" cy="17" r="2"></circle>
+              <circle cx="16.5" cy="17" r="2"></circle>
+            </svg>
+            <div class="cat-label">Cars</div>
+          </div>
+          <div class="card" onclick="pickCategory('💻 Electronics')">
+            <svg class="cat-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="3" y="4" width="18" height="12" rx="2"></rect>
+              <line x1="2" y1="20" x2="22" y2="20"></line>
+            </svg>
+            <div class="cat-label">Laptops</div>
+          </div>
+          <div class="card" onclick="pickCategory('👗 Fashion')">
+            <svg class="cat-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M16 3l4 3-2 3v11H6V9L4 6l4-3"></path>
+              <path d="M8 3a4 4 0 0 0 8 0"></path>
+            </svg>
+            <div class="cat-label">Fashion</div>
+          </div>
+          <div class="card" onclick="pickCategory('🏠 Property')">
+            <svg class="cat-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M3 11l9-8 9 8"></path>
+              <path d="M5 10v10h14V10"></path>
+              <path d="M10 20v-6h4v6"></path>
+            </svg>
+            <div class="cat-label">Property</div>
+          </div>
+          <div class="card" onclick="pickCategory('🪑 Home & Furniture')">
+            <svg class="cat-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M5 11V7a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v4"></path>
+              <path d="M3 11a2 2 0 0 1 2 2v3h14v-3a2 2 0 0 1 2-2"></path>
+              <line x1="6" y1="19" x2="6" y2="16"></line>
+              <line x1="18" y1="19" x2="18" y2="16"></line>
+            </svg>
+            <div class="cat-label">Furniture</div>
+          </div>
+          <div class="card" onclick="pickCategory('🐾 Pets & Animals')">
+            <svg class="cat-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <ellipse cx="6" cy="9" rx="1.5" ry="2"></ellipse>
+              <ellipse cx="10" cy="6" rx="1.5" ry="2"></ellipse>
+              <ellipse cx="14" cy="6" rx="1.5" ry="2"></ellipse>
+              <ellipse cx="18" cy="9" rx="1.5" ry="2"></ellipse>
+              <path d="M8 14c0-2.5 1.8-4 4-4s4 1.5 4 4c0 2.5-2 4-4 4s-4-1.5-4-4z"></path>
+            </svg>
+            <div class="cat-label">Pets</div>
+          </div>
+          <div class="card" onclick="pickCategory('🛠️ Services')">
+            <svg class="cat-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M14.7 6.3a4 4 0 0 0-5.4 5.4L3 18l3 3 6.3-6.3a4 4 0 0 0 5.4-5.4l-2.3 2.3-2.5-.5-.5-2.5z"></path>
+            </svg>
+            <div class="cat-label">Services</div>
+          </div>
+          <div class="card" onclick="pickCategory('🧸 Kids & Toys')">
+            <svg class="cat-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="8" r="5"></circle>
+              <circle cx="9" cy="7" r="0.6" fill="currentColor"></circle>
+              <circle cx="15" cy="7" r="0.6" fill="currentColor"></circle>
+              <path d="M9.5 10c.8.6 1.6.9 2.5.9s1.7-.3 2.5-.9"></path>
+              <path d="M8 13l-3 5M16 13l3 5"></path>
+            </svg>
+            <div class="cat-label">Toys</div>
+          </div>
+          <div class="card" onclick="pickCategory('📚 Books & Education')">
+            <svg class="cat-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M4 4a2 2 0 0 1 2-2h13v18H6a2 2 0 0 1-2-2z"></path>
+              <line x1="8" y1="7" x2="15" y2="7"></line>
+              <line x1="8" y1="11" x2="15" y2="11"></line>
+            </svg>
+            <div class="cat-label">Books</div>
+          </div>
+          <div class="card" onclick="pickCategory('💄 Health & Beauty')">
+            <svg class="cat-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 21s-7-4.5-7-10a5 5 0 0 1 9-3 5 5 0 0 1 9 3c0 5.5-7 10-7 10z" transform="translate(-2,0)"></path>
+            </svg>
+            <div class="cat-label">Beauty</div>
+          </div>
+          <div class="card" onclick="pickCategory('🍔 Food & Beverages')">
+            <svg class="cat-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M4 11h16a4 4 0 0 0-4-6c-1 0-2 .5-2 1.5A3 3 0 0 0 12 5a3 3 0 0 0-2 1.5C9.8 5.5 8.8 5 7.5 5A4 4 0 0 0 4 11z"></path>
+              <path d="M3 11h18v2H3z"></path>
+              <path d="M5 13v5h14v-5"></path>
+            </svg>
+            <div class="cat-label">Food</div>
+          </div>
         </div>
-
-        <button class="buy-btn" onclick="confirmOrder()">✅ Confirm & Pay</button>
-      </div>
-
-      <!-- Step 2: Confirmation -->
-      <div id="escrowStep2" style="display:none;">
-        <div class="success-icon">🎉</div>
-        <h3>Payment Held in Escrow!</h3>
-        <p class="order-ref">Order Ref: <strong id="orderRef"></strong></p>
-        <p class="escrow-note">The seller has been notified. You'll get a call to arrange delivery. Once you receive the item, confirm in "My Orders" to release payment.</p>
-        <button class="buy-btn" onclick="closeEscrow()">Done</button>
       </div>
     </div>
   </div>
-</div>
 
-<!-- My Orders modal — hidden by default -->
-<div id="ordersModal" class="modal">
-  <div class="modal-content">
-    <div class="modal-header">
-      <h2>📦 My Orders</h2>
-      <button class="close-btn" onclick="closeOrders()">✕</button>
-    </div>
-
-    <div class="modal-body">
-      <div id="ordersList"></div>
-      <p id="noOrders" style="display:none; text-align:center; color:#777; padding:20px;">
-        No orders yet — go grab a deal! 🛒
-      </p>
-    </div>
-  </div>
-</div>
-
-<!-- My Shop modal — hidden by default -->
-<div id="shopModal" class="modal">
-  <div class="modal-content">
-    <div class="modal-header">
-      <h2>🧑‍💼 My Shop</h2>
-      <button class="close-btn" onclick="closeShop()">✕</button>
-    </div>
-    <div class="modal-body">
-      <div id="shopList"></div>
-      <p id="noShopItems" style="display:none; text-align:center; color:#777; padding:20px;">
-        Your shop is empty — post something with + Sell! 🛍️
-      </p>
-    </div>
-  </div>
-</div>
-
-<!-- All Categories modal — hidden by default -->
-<div id="allCategoriesModal" class="modal">
-  <div class="modal-content">
-    <div class="modal-header">
-      <h2>All Categories</h2>
-      <button class="close-btn" onclick="closeAllCategories()">✕</button>
-    </div>
-    <div class="modal-body">
-      <div class="categories">
-        <div class="card" onclick="pickCategory('📱 Phones & Tablets')">📱<br>Phones & Tablets</div>
-        <div class="card" onclick="pickCategory('🚗 Vehicles')">🚗<br>Vehicles</div>
-        <div class="card" onclick="pickCategory('🏠 Property')">🏠<br>Property</div>
-        <div class="card" onclick="pickCategory('💻 Electronics')">💻<br>Electronics</div>
-        <div class="card" onclick="pickCategory('👗 Fashion')">👗<br>Fashion</div>
-        <div class="card" onclick="pickCategory('🪑 Home & Furniture')">🪑<br>Home & Furniture</div>
-        <div class="card" onclick="pickCategory('🛠️ Services')">🛠️<br>Services</div>
-        <div class="card" onclick="pickCategory('🧸 Kids & Toys')">🧸<br>Kids & Toys</div>
-        <div class="card" onclick="pickCategory('📚 Books & Education')">📚<br>Books & Education</div>
-        <div class="card" onclick="pickCategory('💄 Health & Beauty')">💄<br>Health & Beauty</div>
-        <div class="card" onclick="pickCategory('🍔 Food & Beverages')">🍔<br>Food & Beverages</div>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- Detail modal — hidden by default -->
+  <!-- Detail modal -->
+  <!-- ============================================
+     DETAIL MODAL — J4Market-style product page
+     ============================================ -->
 <div id="detailModal" class="modal">
-  <div class="modal-content">
+  <div class="modal-content detail-content">
+
+    <!-- Breadcrumb -->
+    <div class="detail-breadcrumb" id="detailBreadcrumb">
+      <button class="detail-breadcrumb-home" onclick="closeDetail()">Home</button>
+      <span class="bc-sep">›</span>
+      <span class="detail-breadcrumb-cat" id="detailBreadcrumbCat">Category</span>
+      <span class="bc-sep">›</span>
+      <span class="detail-breadcrumb-title" id="detailBreadcrumbTitle">—</span>
+    </div>
+
+    <!-- Photo carousel -->
     <div class="detail-photo-wrap">
-  <div class="detail-photo" id="detailPhoto">📦</div>
-  <button class="carousel-arrow carousel-left" id="carouselLeft" onclick="prevPhoto()">◀</button>
-  <button class="carousel-arrow carousel-right" id="carouselRight" onclick="nextPhoto()">▶</button>
-  <div class="carousel-counter" id="carouselCounter"></div>
+      <div class="detail-photo" id="detailPhoto" onclick="openPhotoViewer()">📦</div>
+      <button class="carousel-arrow carousel-left" id="carouselLeft" onclick="prevPhoto()" aria-label="Previous photo">
+  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+    <polyline points="15 18 9 12 15 6"></polyline>
+  </svg>
+</button>
+<button class="carousel-arrow carousel-right" id="carouselRight" onclick="nextPhoto()" aria-label="Next photo">
+  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+    <polyline points="9 18 15 12 9 6"></polyline>
+  </svg>
+</button>
+      <div class="carousel-counter" id="carouselCounter"></div>
+
+  <!-- Wishlist heart (floats over photo) -->
+<button id="detailWishlistBtn" class="detail-wishlist-btn" onclick="toggleWishlist()" title="Save to wishlist" aria-label="Save to wishlist">
+  <svg id="detailWishlistIcon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+  </svg>
+</button>
+
+<!-- Share button (floats over photos) -->
+<button class="detail-share-btn" onclick="shareListing()" title="Share">
+  <svg width="18" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"></path>
+    <polyline points="16 6 12 2 8 6"></polyline>
+    <line x1="12" y1="2" x2="12" y2="15"></line>
+  </svg>
+</button>
+
+<!-- Close button (floats over photos) -->
+<button class="detail-close-btn" onclick="closeDetail()" title="Close">
+  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+    <line x1="18" y1="6" x2="6" y2="18"></line>
+    <line x1="6" y1="6" x2="18" y2="18"></line>
+  </svg>
+</button>
+    </div>
+
+<!-- Thumbnail strip -->
+<div class="detail-thumbs" id="detailThumbs" style="display:none;"></div>
+
+    <!-- Body -->
+    <div class="detail-body">
+
+<!-- Removed banner (only shows for hidden listings) -->
+<div id="detailRemovedBanner" style="display:none;background:#FEE2E2;border:1px solid #FCA5A5;color:#d9534f;border-radius:12px;padding:12px 14px;margin-bottom:14px;font-size:13px;line-height:1.45;">
+  <strong>🚫 This listing has been removed.</strong><br>
+  It's no longer visible to buyers on Marketa. This can happen if it was reported for breaking our rules.
 </div>
 
-    <div class="detail-body">
-      <h2 id="detailName"></h2>
-      <p class="detail-price" id="detailPrice"></p>
-      <p class="detail-meta" id="detailMeta"></p>
-      <p class="detail-negotiable" id="detailNegotiable"></p>
-      <h3>Description</h3>
-      <p id="detailDescription" class="detail-desc"></p>
+      <!-- Title block -->
+      <h2 id="detailName" class="detail-title"></h2>
+      <p id="detailSubtitle" class="detail-subtitle"></p>
 
-      <div class="seller-box">
-        <strong>⭐ Seller Rating: 4.5 / 5</strong>
-        <p>23 successful sales • Member since 2024</p>
-      </div>
+      <!-- Meta row -->
+<div class="detail-meta-row">
+  <div id="detailLocationLine" class="detail-meta-line"></div>
+  <div id="detailFactsLine" class="detail-meta-line"></div>
+</div>
 
-      <button class="buy-btn" onclick="startEscrow()">🛒 Buy with Escrow</button>
-      <button class="chat-btn" onclick="chatSeller()">💬 Chat with Seller</button>
-    </div>
+      <!-- Price -->
+<div class="detail-price-row">
+  <div class="detail-price-col">
+    <p class="detail-price" id="detailPrice"></p>
+    <p class="detail-negotiable" id="detailNegotiable"></p>
   </div>
 </div>
 
-  <!-- Sell modal — hidden by default -->
+<!-- Quantity selector -->
+<div class="detail-qty-row" id="detailQtyRow" style="display:none;">
+  <button type="button" class="detail-qty-btn" id="detailQtyMinus" onclick="changeDetailQty(-1)" aria-label="Decrease quantity">−</button>
+  <span class="detail-qty-value" id="detailQtyValue">1</span>
+  <button type="button" class="detail-qty-btn" id="detailQtyPlus" onclick="changeDetailQty(1)" aria-label="Increase quantity">+</button>
+  <span class="detail-qty-stock" id="detailQtyStock"></span>
+</div>
+
+<!-- DESCRIPTION -->
+<div class="detail-section">
+  <h3 class="detail-section-title">DESCRIPTION</h3>
+  <p id="detailDescription" class="detail-desc"></p>
+</div>
+
+<!-- DETAILS section -->
+<div class="detail-section" id="detailDetailsSection">
+  <h3 class="detail-section-title">DETAILS</h3>
+  <div class="detail-kv">
+    <span class="detail-kv-label">Category</span>
+    <span class="detail-kv-value" id="detailCategory">—</span>
+  </div>
+  <div class="detail-kv">
+    <span class="detail-kv-label">Condition</span>
+    <span class="detail-kv-value" id="detailCondition">—</span>
+  </div>
+  
+  <div class="detail-kv" id="detailSubCategoryRow" style="display: none;">
+  <span class="detail-kv-label">Sub-category</span>
+  <span class="detail-kv-value" id="detailSubCategory">—</span>
+</div>
+
+<!-- Custom rows from Session B get injected here -->
+  <div id="detailCustomRows"></div>
+</div>
+
+<!-- SAFETY TIPS card -->
+<div class="detail-safety-card">
+  <div class="detail-safety-header">
+    <span class="detail-safety-icon">🛡️</span>
+    <span class="detail-safety-title">SAFETY TIPS</span>
+  </div>
+  <ul class="detail-safety-list">
+    <li>Meet the seller in a safe, public place during daytime.</li>
+    <li>Inspect the item carefully before you pay any money.</li>
+    <li>Never send money in advance to someone you have not met.</li>
+    <li>Keep the conversation and payment within the Marketa platform.</li>
+  </ul>
+</div>
+
+      <!-- Similar ads -->
+<div id="detailRelatedSection" class="detail-section" style="display:none;">
+  <h3 class="detail-section-title" id="detailSimilarTitle">Similar ads</h3>
+  <div id="detailRelatedGrid" class="similar-ads-row"></div>
+</div>
+
+      <!-- About this seller -->
+      <!-- About this seller -->
+<div class="detail-section" id="detailSellerSection">
+  <h3 class="detail-section-title">About this seller</h3>
+
+  <div class="detail-seller-row">
+    <div class="detail-seller-avatar" id="detailSellerAvatar">U</div>
+    <div class="detail-seller-info">
+      <div class="detail-seller-name" id="detailSellerName">Seller</div>
+        <span id="detailSellerVerifiedBadge" class="seller-verified-badge" style="display:none;">✓ Verified</span>
+      <div class="detail-seller-sub" id="detailSellerSub">
+        <span id="sellerRatingLine">⭐ Loading…</span>
+        <span id="sellerSubLine"></span>
+      </div>
+      <div class="detail-seller-followers" id="detailSellerFollowers">
+        <span id="followerCountText">0 followers</span>
+      </div>
+    </div>
+    <button id="detailFollowBtn" class="detail-follow-btn" onclick="toggleFollowSeller()" style="display:none;">
+      Follow
+    </button>
+  </div>
+
+  <div class="detail-seller-actions">
+    <button id="detailPhoneBtn" class="detail-phone-btn" onclick="revealSellerPhone()">
+      📞 Show phone number
+    </button>
+  </div>
+
+  <button id="seeReviewsBtn" class="see-reviews-btn" style="display:none;" onclick="openSellerReviews()">📖 See all reviews</button>
+  <div class="detail-danger-row">
+  <button id="detailBlockBtn" class="detail-danger-btn" onclick="blockCurrentSeller()" style="display:none;">🚫 Block</button>
+  <button id="detailReportBtn" class="detail-danger-btn" onclick="reportCurrentListing()">🚩 Report</button>
+</div>
+
+</div>
+
+      <!-- Spacer so sticky bar doesn't cover last content -->
+      <div style="height: 90px;"></div>
+    </div>
+
+    <!-- Sticky bottom bar -->
+<div class="detail-sticky-bar">
+  <button class="detail-sticky-chat" onclick="requireLogin('chat with this seller', chatSeller)">💬 Chat</button>
+  <button class="detail-sticky-buy" id="detailBuyBtn" onclick="requireLogin('buy this item', openCheckout)">🛒 Buy</button>
+  <button class="detail-sticky-boost" id="detailBoostBtn" onclick="openBoostModal()" style="display:none; background:#F2A60A; color:white; border:none;">🔥 Boost</button>
+</div>
+  </div>
+</div>
+
+  <!-- Sell modal — 4-step wizard -->
 <div id="sellModal" class="modal">
-  <div class="modal-content">
+  <div class="modal-content sell-wizard">
+
     <div class="modal-header">
-      <h2>Post Your Listing</h2>
+      <h2 id="sellHeaderTitle">Post Your Listing</h2>
       <button class="close-btn" onclick="toggleSellPage()">✕</button>
     </div>
 
-    <div class="modal-body">
-      <!-- Photo upload -->
-      <label class="photo-upload" for="itemPhoto">
-      <div id="photoPreview">📷</div>
-      <p>Add Photo <span id="photoCount" style="font-weight:normal;color:#666;"></span></p>
-</label>
-      <input type="file" id="itemPhoto" accept="image/*" onchange="previewPhoto()" hidden>
+    <!-- Step indicator -->
+    <div class="sell-steps" id="sellSteps">
+      <div class="sell-step" data-step="1">
+        <div class="sell-step-circle">1</div>
+        <span class="sell-step-label">Category</span>
+      </div>
+      <div class="sell-step" data-step="2">
+        <div class="sell-step-circle">2</div>
+        <span class="sell-step-label">Photos</span>
+      </div>
+      <div class="sell-step" data-step="3">
+        <div class="sell-step-circle">3</div>
+        <span class="sell-step-label">Price & location</span>
+      </div>
+      <div class="sell-step" data-step="4">
+        <div class="sell-step-circle">4</div>
+        <span class="sell-step-label">Review</span>
+      </div>
+    </div>
 
-      <input type="text" id="itemName" placeholder="What are you selling? e.g. iPhone 12">
-      <input type="number" id="itemPrice" placeholder="Price in GH₵">
-      <input type="text" id="itemLocation" placeholder="Location e.g. Accra">
+    <div class="modal-body sell-body">
 
-<textarea id="itemDescription" rows="3" placeholder="Describe the item — any problems, why you're selling, etc."></textarea>
+      <!-- STEP 1 — Category -->
+      <div id="sellStep1" class="sell-step-panel">
+        <label class="sell-field-label">Category <span class="sell-req">*</span></label>
+        <select id="itemCategory">
+          <option value="">Select category</option>
+          <option>📱 Phones & Tablets</option>
+          <option>💻 Electronics</option>
+          <option>👗 Fashion</option>
+          <option>🪑 Home & Furniture</option>
+          <option>🚗 Vehicles</option>
+          <option>🏠 Property</option>
+          <option>🛠️ Services</option>
+          <option>🧸 Kids & Toys</option>
+          <option>📚 Books & Education</option>
+          <option>💄 Health & Beauty</option>
+          <option>🍔 Food & Beverages</option>
+          <option>🐾 Pets & Animals</option>
+        </select>
 
-<label class="check-row">
-  <input type="checkbox" id="itemNegotiable"> Price negotiable
-</label>
+        <label class="sell-field-label">Condition <span class="sell-req">*</span></label>
+        <select id="itemCondition">
+          <option value="">Select condition</option>
+          <option>New</option>
+          <option>Used</option>
+          <option>Refurbished</option>
+        </select>
+        
+        <div id="subCategoryWrap" style="display:none;">
+  <label class="sell-field-label">Sub-category <span class="sell-req">*</span></label>
+  <select id="itemSubCategory">
+    <option value="">Select sub-category</option>
+  </select>
+</div>
 
-      <select id="itemCategory">
-        <option value="">Select category</option>
-        <option>📱 Phones & Tablets</option>
-        <option>💻 Electronics</option>
-        <option>👗 Fashion</option>
-        <option>🪑 Home & Furniture</option>
-        <option>🚗 Vehicles</option>
-        <option>🏠 Property</option>
-        <option>🛠️ Services</option>
-        <option>🧸 Kids & Toys</option>
-        <option>📚 Books & Education</option>
-        <option>💄 Health & Beauty</option>
-        <option>🍔 Food & Beverages</option>
-      </select>
+        <label class="sell-field-label">Ad title <span class="sell-req">*</span></label>
+        <input type="text" id="itemName" maxlength="90" placeholder="e.g. Toyota Corolla 2015 — Accident Free">
+        <div class="sell-counter" id="titleCounter">0/90 characters — write at least 8.</div>
 
-      <select id="itemCondition">
-        <option value="">Condition</option>
-        <option>New</option>
-        <option>Used</option>
-        <option>Refurbished</option>
-      </select>
+        <label class="sell-field-label">Description <span class="sell-req">*</span></label>
+        <textarea id="itemDescription" rows="5" maxlength="1500" placeholder="Describe the item, its condition, what is included and why you are selling. At least 20 characters."></textarea>
+        <div class="sell-counter" id="descCounter">0/1500 characters.</div>
+      </div>
 
-      <button onclick="postListing()">Post Listing</button>
+      <!-- STEP 2 — Photos -->
+      <div id="sellStep2" class="sell-step-panel" style="display:none;">
+        <h3 class="sell-step-title">Add photos of your item</h3>
+        <p class="sell-step-sub">Good lighting and a clean background sell faster. Add up to 3 photos.</p>
+        <label class="photo-upload" for="itemPhoto">
+          <div id="photoPreview">📷</div>
+          <p>Add Photo <span id="photoCount" style="font-weight:normal;color:var(--text-gray);"></span></p>
+        </label>
+        <input type="file" id="itemPhoto" accept="image/*" onchange="previewPhoto()" hidden>
+        <p class="sell-info-line">ℹ️ The first photo becomes the cover image.</p>
+      </div>
+
+      <!-- STEP 3 — Price & location -->
+      <div id="sellStep3" class="sell-step-panel" style="display:none;">
+        <label class="sell-field-label">Price (GH₵) <span class="sell-req">*</span></label>
+        <input type="number" id="itemPrice" placeholder="e.g. 68000">
+        <div class="sell-counter">Enter a realistic price so buyers take your ad seriously.</div>
+        
+        <label class="sell-field-label">Quantity available <span class="sell-req">*</span></label>
+        <input type="number" id="itemQuantity" placeholder="e.g. 1" min="1" max="9999" value="1">
+        <div class="sell-counter">How many do you have for sale? Default is 1.</div>
+
+        <label class="check-row" style="margin:8px 0 14px;">
+          <input type="checkbox" id="itemNegotiable"> Price negotiable
+        </label>
+
+        <label class="sell-field-label">Area / town <span class="sell-req">*</span></label>
+        <input type="text" id="itemLocation" placeholder="e.g. East Legon">
+
+        <label class="sell-field-label">Region <span class="sell-req">*</span></label>
+        <select id="itemRegion">
+          <option value="">Select a region</option>
+          <option>Greater Accra</option>
+          <option>Ashanti</option>
+          <option>Western</option>
+          <option>Central</option>
+          <option>Eastern</option>
+          <option>Northern</option>
+          <option>Volta</option>
+          <option>Upper East</option>
+          <option>Upper West</option>
+          <option>Bono</option>
+          <option>Bono East</option>
+          <option>Ahafo</option>
+          <option>North East</option>
+          <option>Oti</option>
+          <option>Savannah</option>
+          <option>Western North</option>
+        </select>
+        <!-- Details (optional spec rows) -->
+<div class="sell-details-header">
+  <label class="sell-field-label" style="margin:0;">Details <span class="sell-optional">(optional)</span></label>
+  <button type="button" class="sell-add-row-btn" id="sellAddRowBtn" onclick="addDetailRow()">+ Add row</button>
+</div>
+<p class="sell-details-hint">Add specs like Brand, Model, Year, Size — up to 6 rows.</p>
+<div id="sellDetailsRows" class="sell-details-rows"></div>
+      </div>
+
+      <!-- STEP 4 — Review -->
+      <div id="sellStep4" class="sell-step-panel" style="display:none;">
+        <h3 class="sell-step-title">Review your ad before publishing</h3>
+        <p class="sell-step-sub">This is exactly how buyers will see your listing.</p>
+        <div id="sellReviewCard" class="sell-review-card"></div>
+      </div>
+
+      <!-- Navigation buttons -->
+      <div class="sell-nav">
+        <button type="button" class="sell-back-btn" id="sellBackBtn" onclick="sellGoBack()" style="display:none;">← Back</button>
+        <button type="button" class="sell-next-btn" id="sellNextBtn" onclick="sellGoNext()">Continue →</button>
+      </div>
+
     </div>
   </div>
 </div>
 
-  <!-- Floating Sell button -->
-  <button class="sell-btn" onclick="toggleSellPage()">+ Sell</button>
-
   <script>
     window.onerror = function(msg, src, line) {
-    alert("⚠️ ERROR: " + msg + " | Line " + line);
+      alert("⚠️ ERROR: " + msg + " | Line " + line + " | " + src);
     };
   </script>
   <script src="script.js"></script>
 
-  <!-- Return Reason Popup -->
+<!-- ============================================
+     REPORT MODAL — flag a listing or user
+     ============================================ -->
+<div id="reportModal" class="modal" style="display:none;">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h2 id="reportModalTitle">🚩 Report</h2>
+      <button class="close-btn" onclick="closeReportModal()">✕</button>
+    </div>
+    <div class="modal-body">
+      <p id="reportModalSubtitle" style="color:#666;font-size:14px;margin-bottom:16px;"></p>
+
+      <label style="display:block;font-size:13px;font-weight:700;color:var(--text-gray);margin-bottom:6px;">
+        What's wrong?
+      </label>
+      <div id="reportReasons"></div>
+
+      <label for="reportDetails" style="display:block;font-size:13px;font-weight:700;color:var(--text-gray);margin-bottom:6px;margin-top:14px;">
+        More details <span style="color:var(--text-muted);font-weight:500;">(optional)</span>
+      </label>
+      <textarea id="reportDetails" rows="3" maxlength="500" placeholder="Tell us what happened — more info helps us review faster..." style="width:100%;box-sizing:border-box;padding:12px;border:1px solid var(--border-subtle);border-radius:var(--radius-btn);font-family:inherit;font-size:14px;"></textarea>
+      <div id="reportDetailsCounter" style="font-size:12px;color:var(--text-muted);margin-top:4px;text-align:right;">0/500</div>
+
+      <div id="reportError" style="color:#d9534f;font-size:13px;margin:6px 0 4px;display:none;"></div>
+
+      <button class="buy-btn" style="margin-top:12px;background:#d9534f;" onclick="submitReport()">🚩 Submit report</button>
+      <button style="width:100%;margin-top:8px;background:none;border:none;color:var(--text-gray);font-size:14px;cursor:pointer;" onclick="closeReportModal()">Cancel</button>
+
+      <p style="font-size:11px;color:var(--text-muted);text-align:center;margin-top:12px;line-height:1.4;">
+        Reports are reviewed by the Marketa team. False reports may result in account restrictions.
+      </p>
+    </div>
+  </div>
+</div>
+
+<!-- Boost Listing Modal -->
+<div id="boostModal" class="modal" style="display:none;">
+  <div class="modal-content" style="max-width: 380px;">
+    <div class="modal-header" style="background: #F2A60A;">
+      <h2>🔥 Boost this listing</h2>
+      <button class="close-btn" onclick="closeBoostModal()">✕</button>
+    </div>
+    <div class="modal-body">
+      <div style="text-align:center; padding: 10px 0 0;">
+        <p style="font-size: 14px; color: var(--text-gray); line-height: 1.5; margin-bottom: 16px;">
+          Boosted listings appear at the top of the homepage with a special badge. Choose how long you want to stand out:
+        </p>
+      </div>
+      
+      <!-- Tier 1: 1 Month -->
+      <label class="checkout-mode-option selected" data-boost-days="30" style="margin-bottom: 10px;">
+        <input type="radio" name="boostPlan" value="30" checked>
+        <div class="checkout-mode-body">
+          <div class="checkout-mode-name">🔥 1 Month</div>
+          <div class="checkout-mode-sub">Appear at the top for 30 days</div>
+        </div>
+        <div class="checkout-mode-check">GH₵ 20</div>
+      </label>
+
+      <!-- Tier 2: 3 Months -->
+      <label class="checkout-mode-option" data-boost-days="90" style="margin-bottom: 10px;">
+        <input type="radio" name="boostPlan" value="90">
+        <div class="checkout-mode-body">
+          <div class="checkout-mode-name">🚀 3 Months <span style="background:#F2A60A;color:white;font-size:10px;padding:2px 6px;border-radius:4px;margin-left:4px;">POPULAR</span></div>
+          <div class="checkout-mode-sub">Appear at the top for 90 days</div>
+        </div>
+        <div class="checkout-mode-check">GH₵ 50</div>
+      </label>
+
+      <!-- Tier 3: 6 Months -->
+      <label class="checkout-mode-option" data-boost-days="180" style="margin-bottom: 10px;">
+        <input type="radio" name="boostPlan" value="180">
+        <div class="checkout-mode-body">
+          <div class="checkout-mode-name">🌟 6 Months</div>
+          <div class="checkout-mode-sub">Appear at the top for 180 days</div>
+        </div>
+        <div class="checkout-mode-check">GH₵ 90</div>
+      </label>
+
+      <!-- Tier 4: 1 Year -->
+      <label class="checkout-mode-option" data-boost-days="365" style="margin-bottom: 16px;">
+        <input type="radio" name="boostPlan" value="365">
+        <div class="checkout-mode-body">
+          <div class="checkout-mode-name">💎 1 Year <span style="background:#17936A;color:white;font-size:10px;padding:2px 6px;border-radius:4px;margin-left:4px;">BEST VALUE</span></div>
+          <div class="checkout-mode-sub">Appear at the top for 365 days</div>
+        </div>
+        <div class="checkout-mode-check">GH₵ 150</div>
+      </label>
+      
+      <div id="boostError" style="color:#d9534f;font-size:13px;margin:6px 0;display:none;"></div>
+      
+      <button class="buy-btn" style="background: #F2A60A;" onclick="submitBoost()">Pay & Boost</button>
+      <button style="width:100%;margin-top:8px;background:none;border:none;color:var(--text-gray);font-size:14px;cursor:pointer;" onclick="closeBoostModal()">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<!-- Review modal — rate a seller or buyer -->
+<div id="reviewModal" class="modal" style="display:none;">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h2 id="reviewModalTitle">⭐ Rate this Seller</h2>
+      <button class="close-btn" onclick="closeReviewModal()">✕</button>
+    </div>
+    <div class="modal-body">
+      <p id="reviewModalSubtitle" style="color:#666;font-size:14px;margin-bottom:16px;"></p>
+
+      <div class="star-picker" id="starPicker">
+        <button class="star-btn" data-stars="1" onclick="pickStars(1)">★</button>
+        <button class="star-btn" data-stars="2" onclick="pickStars(2)">★</button>
+        <button class="star-btn" data-stars="3" onclick="pickStars(3)">★</button>
+        <button class="star-btn" data-stars="4" onclick="pickStars(4)">★</button>
+        <button class="star-btn" data-stars="5" onclick="pickStars(5)">★</button>
+      </div>
+      <p id="starLabel" style="text-align:center;color:#888;font-size:13px;margin:6px 0 16px;">Tap a star</p>
+
+      <textarea id="reviewText" rows="3" placeholder="Optional: tell others about your experience..." style="width:100%;box-sizing:border-box;padding:12px;border:1px solid var(--border-subtle);border-radius:var(--radius-btn);font-family:inherit;font-size:14px;"></textarea>
+
+      <button class="buy-btn" style="margin-top:12px;" onclick="submitReview()">Submit Review</button>
+      <button style="width:100%;margin-top:8px;background:none;border:none;color:#666;cursor:pointer;" onclick="closeReviewModal()">Cancel</button>
+    </div>
+  </div>
+</div>
+<!-- Seller reviews modal -->
+<div id="reviewsModal" class="modal">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h2 id="reviewsModalTitle">⭐ Seller Reviews</h2>
+      <button class="close-btn" onclick="closeSellerReviews()">✕</button>
+    </div>
+    <div class="modal-body">
+
+      <!-- Tabs — shown only when viewing your own reviews -->
+      <div id="reviewsTabs" class="reviews-tabs" style="display:none;">
+        <button class="reviews-tab active" data-tab="received" onclick="filterMyReviewsTab('received')">Received</button>
+        <button class="reviews-tab" data-tab="written" onclick="filterMyReviewsTab('written')">Written</button>
+      </div>
+
+      <div id="reviewsList"></div>
+      <p id="noReviews" style="display:none; text-align:center; color:#777; padding:20px;">
+        No reviews yet for this seller.
+      </p>
+    </div>
+  </div>
+</div>
   <div id="returnModal" class="modal" style="display:none;">
     <div class="modal-content">
       <h3>↩️ Return Goods</h3>
@@ -278,25 +1636,1291 @@
 
   <footer>
     <p>© 2025 Marketa. All rights reserved.</p>
+    <!-- ============================================
+     BOTTOM NAVIGATION BAR
+     ============================================ -->
+<nav id="bottomNav" class="bottom-nav">
+  <button class="bottom-nav-item" data-tab="home" onclick="bottomNavGo('home')">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+      <polyline points="9 22 9 12 15 12 15 22"></polyline>
+    </svg>
+    <span>Home</span>
+  </button>
+
+  <button class="bottom-nav-item" data-tab="messages" onclick="bottomNavGo('messages')">
+    <div style="position:relative;">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+      </svg>
+      <span id="bottomNavMessagesBadge" class="bottom-nav-badge" style="display:none;"></span>
+    </div>
+    <span>Messages</span>
+  </button>
+
+  <button class="bottom-nav-item" data-tab="sell" onclick="bottomNavGo('sell')">
+  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <line x1="12" y1="5" x2="12" y2="19"></line>
+    <line x1="5" y1="12" x2="19" y2="12"></line>
+  </svg>
+  <span>Sell</span>
+</button>
+
+  <button class="bottom-nav-item" data-tab="mine" onclick="bottomNavGo('mine')">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+      <circle cx="12" cy="7" r="4"></circle>
+    </svg>
+    <span>Mine</span>
+  </button>
+</nav>
+
+<!-- ============================================
+     SESSION 11 — HAMBURGER DRAWER
+     ============================================ -->
+<div id="drawerOverlay" class="drawer-overlay" onclick="closeDrawer()"></div>
+
+<div id="mainDrawer" class="drawer">
+  <div class="drawer-inner">
+
+    <!-- Top: close + logo + Sell -->
+    <div class="drawer-top">
+      <button class="drawer-close" onclick="closeDrawer()" aria-label="Close">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="18" y1="6" x2="6" y2="18"></line>
+          <line x1="6" y1="6" x2="18" y2="18"></line>
+        </svg>
+      </button>
+      <div class="drawer-logo">
+        <img src="icon.png" alt="Marketa">
+      </div>
+      <button class="drawer-sell" onclick="closeDrawer(); drawerNavTo('sell');">
+        <span class="drawer-sell-plus">+</span> Sell
+      </button>
+    </div>
+
+    <!-- Search bar -->
+    <div class="drawer-search">
+      <span class="drawer-search-icon">🔍</span>
+      <input type="text" id="drawerSearchInput" class="drawer-search-input" placeholder="Search on Marketa..." autocomplete="off" onkeydown="if(event.key==='Enter'){drawerGoToSearch()}">
+      <button class="drawer-go" onclick="drawerGoToSearch()">Go</button>
+    </div>
+
+    <!-- Grid of buttons -->
+    <div class="drawer-grid">
+
+      <button class="drawer-grid-btn" data-page="profile" onclick="closeDrawer(); requireLogin('see your profile', openProfile);">
+  <span class="drawer-grid-icon">👤</span>
+  <span class="drawer-grid-label">My profile</span>
+</button>
+
+<button class="drawer-grid-btn" data-page="listings" onclick="closeDrawer(); requireLogin('see your listings', openMyListings);">
+  <span class="drawer-grid-icon">📋</span>
+  <span class="drawer-grid-label">My listings</span>
+</button>
+
+<button class="drawer-grid-btn" data-page="shop" onclick="closeDrawer(); requireLogin('manage your shop', openShop);">
+  <span class="drawer-grid-icon">🛍️</span>
+  <span class="drawer-grid-label">My shop</span>
+</button>
+
+<button class="drawer-grid-btn" data-page="dashboard" onclick="closeDrawer(); requireLogin('see your dashboard', openDashboard);">
+  <span class="drawer-grid-icon">📊</span>
+  <span class="drawer-grid-label">Dashboard</span>
+</button>
+
+<button class="drawer-grid-btn" data-page="orders" onclick="closeDrawer(); requireLogin('see your orders', openOrders);">
+  <span class="drawer-grid-icon">📦</span>
+  <span class="drawer-grid-label">My orders</span>
+</button>
+
+<button class="drawer-grid-btn" data-page="messages" onclick="closeDrawer(); drawerNavTo('messages');">
+  <span class="drawer-grid-icon">💬</span>
+  <span class="drawer-grid-label">Messages</span>
+</button>
+
+<button class="drawer-grid-btn" data-page="wishlist" onclick="closeDrawer(); requireLogin('see your wishlist', openWishlistPage);">
+  <span class="drawer-grid-icon">❤️</span>
+  <span class="drawer-grid-label">Saved items</span>
+</button>
+
+<button class="drawer-grid-btn" data-page="history" onclick="closeDrawer(); openBrowseHistory();">
+  <span class="drawer-grid-icon">👣</span>
+  <span class="drawer-grid-label">Browse history</span>
+</button>
+
+    </div>
+
+    <!-- Log out -->
+    <button class="drawer-logout" onclick="closeDrawer(); logoutUser();">
+      <span class="drawer-logout-icon">↪</span>
+      Log out
+    </button>
+
+    <!-- Below: Moderation (admin) / Help / Theme -->
+    <button id="drawerModerationBtn" class="drawer-row" onclick="closeDrawer(); openModeration();" style="display:none;">
+      <span class="drawer-row-icon">🛡️</span>
+      <span class="drawer-row-label">Moderation panel</span>
+    </button>
+    
+    <button class="drawer-row" onclick="closeDrawer(); openSettings();">
+  <span class="drawer-row-icon">⚙️</span>
+  <span class="drawer-row-label">Settings</span>
+</button>
+
+    <button class="drawer-row" onclick="closeDrawer(); openSupport();">
+      <span class="drawer-row-icon">❓</span>
+      <span class="drawer-row-label">Help & support</span>
+    </button>
+
+    <button class="drawer-row" onclick="toggleThemeFromDrawer()">
+      <span class="drawer-row-icon" id="drawerThemeIcon">🌙</span>
+      <span class="drawer-row-label" id="drawerThemeLabel">Switch to dark mode</span>
+    </button>
+
+  </div>
+</div>
+
   </footer>
 
-  <!-- Admin Dispute Panel (secret: tap logo 5x) -->
   <div id="adminPanel" style="display:none; padding:16px; max-width:100%; overflow-x:hidden;">
     <button class="filter-btn" onclick="closeAdmin()">← Back to Marketa</button>
     <h2 style="margin-top:12px;">🧑‍⚖️ Marketa Admin — Disputes</h2>
     <div id="adminDisputes"></div>
   </div>
-<div id="threadModal" class="modal">
-  <div class="modal-content">
-    <h2>⚖️ Evidence & Admin Chat</h2>
-    <div id="threadMessages" style="max-height:300px; overflow-y:auto; text-align:left;"></div>
-    <textarea id="threadInput" placeholder="Describe the issue or add a note..." style="width:100%; margin-top:10px;"></textarea>
-    <input type="file" id="threadImage" accept="image/*" style="margin-top:8px;">
-    <button class="btn-primary" onclick="sendThreadMessage()">📨 Send to Admin</button>
-    <button class="btn-secondary" onclick="closeThread()">Close</button>
+
+ <div id="threadModal" class="modal chat-modal">
+  <div class="chat-container">
+    <div class="chat-header">
+  <div class="chat-header-info">
+    <h2><span id="chatHeaderTitle">⚖️ Evidence & Admin Chat</span><span id="chatHeaderVerified" class="chat-header-verified" style="display:none;" title="Verified user">✓</span></h2>
+    <div id="threadTypingIndicator" class="chat-typing" style="display:none;">
+      <span class="chat-typing-dots"></span>
+      <span class="chat-typing-text">typing…</span>
+    </div>
+  </div>
+  <button class="chat-close" onclick="closeThread()">✕</button>
+</div>threadMessages"></div>
+      <div id="replyPreview" class="reply-preview" style="display:none;">
+  <div class="reply-preview-body">
+    <div class="reply-preview-label" id="replyPreviewLabel">Replying to...</div>
+    <div class="reply-preview-text" id="replyPreviewText"></div>
+  </div>
+  <button class="reply-preview-close" onclick="cancelReply()">✕</button>
+</div>
+<div class="chat-footer">
+  <label class="chat-attach" for="threadImage">📎</label>
+  <input type="file" id="threadImage" accept="image/*" hidden>
+  <textarea id="threadInput" placeholder="Type a message..." rows="2"></textarea>
+  <button class="chat-send" onclick="sendThreadMessage()">Send ▸</button>
+</div>
+
+<!-- Shown instead of chat-footer when the order is closed (refunded/released) -->
+<div id="closedChatNotice" class="closed-chat-notice" style="display:none;">
+  🔒 <strong>This order is closed.</strong> Chat is read-only.
+</div>
+
+<!-- Admin ruling buttons (shown only in admin dispute view) -->
+<div id="adminRulingBar" class="admin-ruling-bar" style="display:none;">
+  <button class="admin-rule-btn admin-rule-refund" onclick="adminRuleFromChat('refund')">
+    💸 Rule: Refund Buyer
+  </button>
+  <button class="admin-rule-btn admin-rule-release" onclick="adminRuleFromChat('release')">
+    ✅ Rule: Release to Seller
+  </button>
+</div>
+    </div>
+  </div>
+
+<!-- Message action sheet (popup on long-press) -->
+<div id="msgActionSheet" class="msg-action-sheet">
+  <div class="msg-action-backdrop" onclick="closeMsgActionSheet()"></div>
+  <div class="msg-action-menu">
+    <button class="msg-action-item" id="msgReplyBtn" onclick="startReply()">↩️ Reply</button>
+    <button class="msg-action-item" id="msgEditBtn" onclick="editActiveMessage()">✏️ Edit</button>
+    <button class="msg-action-item msg-action-danger" id="msgDeleteBtn" onclick="deleteActiveMessage()">🗑 Delete</button>
+    <button class="msg-action-item msg-action-cancel" onclick="closeMsgActionSheet()">Cancel</button>
+  </div>
+</div>
+
+<!-- Thread action sheet (popup on long-press of a conversation row) -->
+<div id="threadActionSheet" class="msg-action-sheet">
+  <div class="msg-action-backdrop" onclick="closeThreadActionSheet()"></div>
+  <div class="msg-action-menu">
+    <button class="msg-action-item msg-action-danger" onclick="deleteActiveThread()">🗑 Delete conversation</button>
+    <button class="msg-action-item msg-action-cancel" onclick="closeThreadActionSheet()">Cancel</button>
+  </div>
+</div>
+
+<!-- Firebase SDK + init -->
+<script>
+  // Basic script test (plain, no module)
+  console.log("Firebase: basic script loaded");
+</script>
+<script type="module">
+  console.log("Firebase: module script started");
+
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+  import { getFirestore } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+  import { getAuth } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+
+  console.log("Firebase: SDK imports succeeded");
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyBxVHRde_3g9WCtU2V02kHWDWCuoQSeX0o",
+    authDomain: "marketa-82759.firebaseapp.com",
+    projectId: "marketa-82759",
+    storageBucket: "marketa-82759.firebasestorage.app",
+    messagingSenderId: "100674814385",
+    appId: "1:100674814385:web:233556c0da9325b6a33d99"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const db = getFirestore(app);
+  const auth = getAuth(app);
+
+  window.marketaFirebase = { app, db, auth };
+  
+  window.dispatchEvent(new Event("firebase-ready"));
+
+  console.log("✅ Firebase connected:", firebaseConfig.projectId);
+</script>
+<script>
+  // Register the service worker (PWA)
+  if ("serviceWorker" in navigator) {
+    window.addEventListener("load", function() {
+      navigator.serviceWorker.register("./sw.js").then(function(reg) {
+        console.log("✅ Service worker registered:", reg.scope);
+      }).catch(function(err) {
+        console.warn("Service worker registration failed:", err);
+      });
+    });
+  }
+</script>
+<!-- ============================================
+     FULL-SCREEN PHOTO VIEWER
+     ============================================ -->
+<div id="photoViewer" class="photo-viewer" style="display:none;" onclick="closePhotoViewer()">
+  <button class="photo-viewer-close" onclick="event.stopPropagation(); closePhotoViewer();" aria-label="Close">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+      <line x1="18" y1="6" x2="6" y2="18"></line>
+      <line x1="6" y1="6" x2="18" y2="18"></line>
+    </svg>
+  </button>
+
+  <button class="photo-viewer-arrow photo-viewer-left" onclick="event.stopPropagation(); photoViewerPrev();" aria-label="Previous photo">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+      <polyline points="15 18 9 12 15 6"></polyline>
+    </svg>
+  </button>
+
+  <img id="photoViewerImg" class="photo-viewer-img" src="" alt="" onclick="event.stopPropagation();">
+
+  <button class="photo-viewer-arrow photo-viewer-right" onclick="event.stopPropagation(); photoViewerNext();" aria-label="Next photo">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+      <polyline points="9 18 15 12 9 6"></polyline>
+    </svg>
+  </button>
+
+  <div id="photoViewerCounter" class="photo-viewer-counter">1 / 1</div>
+</div>
+<!-- ============================================
+     PROFILE PAGE (full-screen overlay)
+     ============================================ -->
+<!-- ============================================
+     PROFILE PAGE (full-screen overlay)
+     ============================================ -->
+<div id="profilePage" class="profile-page" style="display:none;">
+
+  <div class="page-shell">
+
+    <!-- Breadcrumb: back link + trail -->
+    <button class="page-back-link" onclick="closeProfile()">
+      <span class="page-back-arrow">←</span>
+      Back to home
+    </button>
+
+    <div class="page-breadcrumb">
+      <span>Home</span>
+      <span class="bc-sep">›</span>
+      <span class="bc-current">My profile</span>
+    </div>
+
+    <!-- Avatar + info card -->
+    <div class="page-card">
+
+      <!-- Avatar + name + email -->
+      <div style="display:flex;align-items:center;gap:14px;margin-bottom:16px;">
+        <div id="profileAvatar" style="width:72px;height:72px;border-radius:50%;background:var(--green-light);color:var(--green-dark);font-size:28px;font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0;">A</div>
+        <div style="min-width:0;flex:1;">
+          <div id="profileDisplayName" style="font-size:19px;font-weight:800;color:var(--text-dark);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">User</div>
+          <div id="profileEmail" style="font-size:13px;color:var(--text-gray);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:2px;">user@example.com</div>
+        </div>
+      </div>
+
+      <hr class="page-divider">
+
+      <!-- Account details rows -->
+      <div class="kv-row">
+        <span class="kv-label">Account type</span>
+        <span class="kv-value" id="profileAccountType">Buyer</span>
+      </div>
+      <div class="kv-row">
+        <span class="kv-label">Member since</span>
+        <span class="kv-value" id="profileMemberSince">—</span>
+      </div>
+      <div class="kv-row">
+        <span class="kv-label">Location</span>
+        <span class="kv-value" id="profileLocation">Not set</span>
+      </div>
+      <div class="kv-row" id="profileBioRow" style="display:none;">
+        <span class="kv-label">Bio</span>
+        <span class="kv-value" id="profileBio">—</span>
+       </div>
+      <div class="kv-row" id="profileWebsiteRow" style="display:none;">
+  <span class="kv-label">Website</span>
+  <span class="kv-value" id="profileWebsite">—</span>
+</div>
+
+      <hr class="page-divider">
+
+<!-- Tappable stat rows -->
+<button class="profile-stat-row" onclick="openRatingSummary()">
+  <span class="profile-stat-icon">⭐</span>
+  <span class="profile-stat-label">Rating</span>
+  <span class="profile-stat-value" id="profileRating">—</span>
+  <span class="profile-stat-chevron">›</span>
+</button>
+
+<button class="profile-stat-row" onclick="openMyReviews()">
+  <span class="profile-stat-icon">📝</span>
+  <span class="profile-stat-label">Reviews</span>
+  <span class="profile-stat-value" id="profileReviews">0</span>
+  <span class="profile-stat-chevron">›</span>
+</button>
+
+<button class="profile-stat-row" onclick="requireLogin('see your followers', openFollowersPage);">
+  <span class="profile-stat-icon">👥</span>
+  <span class="profile-stat-label">Followers</span>
+  <span class="profile-stat-value" id="profileFollowers">0</span>
+  <span class="profile-stat-chevron">›</span>
+</button>
+
+<button class="profile-stat-row" onclick="requireLogin('see who you follow', openFollowingPage);">
+  <span class="profile-stat-icon">➕</span>
+  <span class="profile-stat-label">Following</span>
+  <span class="profile-stat-value" id="profileFollowing">0</span>
+  <span class="profile-stat-chevron">›</span>
+</button>
+
+      <hr class="page-divider">
+
+<!-- Report user (only visible when viewing someone else's profile) -->
+<button id="profileReportBtn" class="page-action-row" onclick="reportCurrentProfileUser()" style="display:none;color:#d9534f;">
+  <span class="par-icon">🚩</span>
+  <span class="par-label">Report this user</span>
+  <span class="par-chevron">›</span>
+</button>
+
+      <!-- Log out button (orange outline) -->
+      <button class="drawer-logout" onclick="logoutUser();" style="margin-top:4px;">
+        <span class="drawer-logout-icon">↪</span>
+        Log out
+      </button>
+
+    </div>
+
+  </div>
+
+</div>
+
+<!-- ============================================
+     SETTINGS PAGE (full-screen overlay)
+     ============================================ -->
+<div id="settingsPage" class="profile-page" style="display:none;">
+  <div class="profile-header">
+    <button class="profile-back" onclick="closeSettings()">←</button>
+    <h2>Settings</h2>
+    <div style="width:40px;"></div>
+  </div>
+
+  <div class="profile-menu" id="settingsMenu">
+
+  <button class="profile-menu-item" onclick="openAccountSettings()">
+    <span class="profile-menu-icon">👤</span>
+    <span class="profile-menu-label">
+      Account
+      <span id="accountNameSub" style="display:block;font-size:12px;color:var(--text-muted);font-weight:500;margin-top:2px;">Your name</span>
+    </span>
+    <span class="profile-menu-chevron">›</span>
+  </button>
+
+  <button class="profile-menu-item" onclick="openPasswordSettings()">
+    <span class="profile-menu-icon">🔒</span>
+    <span class="profile-menu-label">
+      Password
+      <span style="display:block;font-size:12px;color:var(--text-muted);font-weight:500;margin-top:2px;">Change your password</span>
+    </span>
+    <span class="profile-menu-chevron">›</span>
+  </button>
+
+  <button class="profile-menu-item" onclick="openAppearancePicker()">
+    <span class="profile-menu-icon" id="appearanceIcon">🌙</span>
+    <span class="profile-menu-label">
+      Appearance
+      <span id="appearanceSub" style="display:block;font-size:12px;color:var(--text-muted);font-weight:500;margin-top:2px;">Light</span>
+    </span>
+    <span class="profile-menu-chevron">›</span>
+  </button>
+
+<button class="profile-menu-item" onclick="openNotificationSettings()">
+  <span class="profile-menu-icon">🔔</span>
+  <span class="profile-menu-label">
+    Notifications
+    <span id="notificationsSub" style="display:block;font-size:12px;color:var(--text-muted);font-weight:500;margin-top:2px;">Off</span>
+  </span>
+  <span class="profile-menu-chevron">›</span>
+</button>
+
+<button class="profile-menu-item" onclick="openBlockedUsersPage()">
+  <span class="profile-menu-icon">🚫</span>
+  <span class="profile-menu-label">
+    Blocked users
+    <span style="display:block;font-size:12px;color:var(--text-muted);font-weight:500;margin-top:2px;">Manage your block list</span>
+  </span>
+  <span class="profile-menu-chevron">›</span>
+</button>
+
+<button class="profile-menu-item" onclick="openLegalDoc('terms')">
+  <span class="profile-menu-icon">📄</span>
+  <span class="profile-menu-label">
+    Terms of Service
+    <span style="display:block;font-size:12px;color:var(--text-muted);font-weight:500;margin-top:2px;">The rules for using Marketa</span>
+  </span>
+  <span class="profile-menu-chevron">›</span>
+</button>
+
+<button class="profile-menu-item" onclick="openLegalDoc('privacy')">
+  <span class="profile-menu-icon">🔒</span>
+  <span class="profile-menu-label">
+    Privacy Policy
+    <span style="display:block;font-size:12px;color:var(--text-muted);font-weight:500;margin-top:2px;">How we handle your data</span>
+  </span>
+  <span class="profile-menu-chevron">›</span>
+</button>
+
+<button class="profile-menu-item" onclick="openLegalDoc('guidelines')">
+  <span class="profile-menu-icon">🤝</span>
+  <span class="profile-menu-label">
+    Community Guidelines
+    <span style="display:block;font-size:12px;color:var(--text-muted);font-weight:500;margin-top:2px;">What's allowed on Marketa</span>
+  </span>
+  <span class="profile-menu-chevron">›</span>
+</button>
+
+<button class="profile-menu-item" onclick="openAboutSettings()">
+  <span class="profile-menu-icon">ℹ️</span>
+  <span class="profile-menu-label">
+    About
+    <span style="display:block;font-size:12px;color:var(--text-muted);font-weight:500;margin-top:2px;">Marketa v1.0</span>
+  </span>
+  <span class="profile-menu-chevron">›</span>
+</button>
+
+<button class="profile-menu-item profile-menu-logout" onclick="openDeleteAccount()">
+  <span class="profile-menu-icon">🗑️</span>
+  <span class="profile-menu-label">
+    Delete Account
+    <span style="display:block;font-size:12px;color:var(--text-muted);font-weight:500;margin-top:2px;">Permanently remove your account</span>
+  </span>
+  <span class="profile-menu-chevron">›</span>
+</button>
+
+</div>
+</div>
+
+<!-- ============================================
+     BLOCKED USERS PAGE
+     ============================================ -->
+<div id="blockedUsersPage" class="profile-page" style="display:none;">
+
+  <div class="page-shell">
+
+    <button class="page-back-link" onclick="closeBlockedUsersPage()">
+      <span class="page-back-arrow">←</span>
+      Back to settings
+    </button>
+
+    <div class="page-breadcrumb">
+      <span>Settings</span>
+      <span class="bc-sep">›</span>
+      <span class="bc-current">Blocked users</span>
+    </div>
+
+    <h1 class="page-title">Blocked users</h1>
+    <p class="page-subtitle">People you've blocked. They can't message you, and you won't see their listings.</p>
+
+    <div id="blockedUsersCount" class="saved-count-pill">0 blocked</div>
+
+    <div id="blockedUsersList" class="follow-list"></div>
+
+    <div id="blockedUsersEmpty" class="empty-state" style="display:none;">
+      <div class="empty-state-icon">🚫</div>
+      <div class="empty-state-title">No blocked users</div>
+      <div class="empty-state-text">You haven't blocked anyone yet.</div>
+    </div>
+
+  </div>
+
+</div>
+
+<!-- ============================================
+     LEGAL PAGE — ToS / Privacy / Guidelines
+     ============================================ -->
+<div id="legalPage" class="profile-page" style="display:none;">
+
+  <div class="page-shell">
+
+    <!-- Breadcrumb -->
+    <button class="page-back-link" onclick="closeLegalPage()">
+      <span class="page-back-arrow">←</span>
+      Back to settings
+    </button>
+
+    <div class="page-breadcrumb">
+      <span>Settings</span>
+      <span class="bc-sep">›</span>
+      <span class="bc-current" id="legalBreadcrumbTitle">Legal</span>
+    </div>
+
+    <!-- Title -->
+    <h1 class="page-title" id="legalTitle">Legal</h1>
+    <p class="page-subtitle" id="legalSubtitle"></p>
+
+    <!-- Last updated pill -->
+    <div class="legal-updated" id="legalUpdated">Last updated: —</div>
+
+    <!-- Content gets injected here -->
+    <div id="legalContent" class="legal-content"></div>
+
+    <!-- Footer -->
+    <p class="legal-footer-note">
+      Questions about this document? Contact us at
+      <a href="mailto:support@marketa.gh" style="color:var(--green-main);text-decoration:none;font-weight:700;">support@marketa.gh</a>.
+    </p>
+
+  </div>
+
+</div>
+
+<!-- ============================================
+     MODERATION PANEL PAGE (full-screen overlay)
+     ============================================ -->
+<div id="moderationPage" class="profile-page" style="display:none;">
+
+  <div class="page-shell">
+
+    <!-- Breadcrumb -->
+    <button class="page-back-link" onclick="closeModeration()">
+      <span class="page-back-arrow">←</span>
+      Back to account
+    </button>
+
+    <div class="page-breadcrumb">
+      <span>Home</span>
+      <span class="bc-sep">›</span>
+      <span class="bc-current">Moderation</span>
+    </div>
+
+    <!-- Title + subtext -->
+    <h1 class="page-title">Moderation panel</h1>
+    <p class="page-subtitle">Review disputes, oversee orders, and manage users.</p>
+
+    <!-- Signed-in-as pill -->
+    <div class="moderator-signed-pill">
+      <span class="moderator-signed-icon">🛡️</span>
+      <span>Signed in as <strong id="moderationSignedIn">Admin</strong></span>
+    </div>
+
+    <!-- Stat cards — 2x2 -->
+    <div class="mod-stats-grid">
+
+      <div class="mod-stat-card">
+        <div class="mod-stat-label">OPEN DISPUTES</div>
+        <div class="mod-stat-value" id="modStatOpenDisputes">0</div>
+      </div>
+
+      <div class="mod-stat-card">
+        <div class="mod-stat-label">TOTAL ORDERS</div>
+        <div class="mod-stat-value" id="modStatTotalOrders">0</div>
+      </div>
+
+      <div class="mod-stat-card">
+        <div class="mod-stat-label">ORDERS IN ESCROW</div>
+        <div class="mod-stat-value green" id="modStatOrdersEscrow">0</div>
+      </div>
+
+      <div class="mod-stat-card amber">
+        <div class="mod-stat-label">HELD IN ESCROW</div>
+        <div class="mod-stat-value amber-text" id="modStatHeldEscrow">GH₵ 0</div>
+      </div>
+
+    </div>
+
+    <!-- Main tabs — 2x2 -->
+    <div class="mod-tabs">
+      <button class="mod-tab active" data-tab="disputes" onclick="switchModerationTab('disputes')">⚖️ Disputes</button>
+      <button class="mod-tab" data-tab="orders" onclick="switchModerationTab('orders')">📋 Orders</button>
+      <button class="mod-tab" data-tab="users" onclick="switchModerationTab('users')">👥 Users</button>
+      <button class="mod-tab" data-tab="moderators" onclick="switchModerationTab('moderators')">🛡️ Moderators</button>
+      <button class="mod-tab" data-tab="reports" onclick="switchModerationTab('reports')">🚩 Reports</button>
+      <button class="mod-tab" data-tab="tickets" onclick="switchModerationTab('tickets')">🎫 Tickets</button>
+      <button class="mod-tab" id="modTabAnalytics" data-tab="analytics" onclick="switchModerationTab('analytics')" style="display:none;">📊 Analytics</button>
+    </div>
+
+    <!-- Tab body -->
+    <div id="modTabBody">
+
+      <!-- Placeholder until 19c -->
+      <div class="empty-state">
+        <div class="empty-state-icon">🛠️</div>
+        <div class="empty-state-title">Coming next</div>
+        <div class="empty-state-text">This tab will be wired up in the next step.</div>
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
+
+<!-- ============================================
+     MODERATION — USER ACTION DIALOG
+     ============================================ -->
+<div id="modUserActionModal" class="modal" style="display:none;">
+  <div class="modal-content" style="max-width: 380px;">
+    <div class="modal-header">
+      <h2 id="modUserActionTitle">👤 User</h2>
+      <button class="close-btn" onclick="closeModUserAction()">✕</button>
+    </div>
+    <div class="modal-body">
+
+      <div style="text-align:center;padding:6px 0 14px;">
+        <div id="modUserActionAvatar" style="width:64px;height:64px;border-radius:50%;background:var(--green-light);color:var(--green-dark);font-size:26px;font-weight:800;display:flex;align-items:center;justify-content:center;margin:0 auto 10px;">A</div>
+        <div id="modUserActionName" style="font-size:18px;font-weight:800;color:var(--text-dark);">Name</div>
+        <div id="modUserActionEmail" style="font-size:13px;color:var(--text-gray);margin-top:2px;">email</div>
+      </div>
+
+      <button id="modUserVerifyBtn" class="buy-btn" style="margin-top:8px;" onclick="toggleUserVerified()">
+        ✓ Mark as verified
+      </button>
+
+      <button style="width:100%;margin-top:8px;background:none;border:none;color:var(--text-gray);font-size:14px;cursor:pointer;padding:10px;" onclick="closeModUserAction()">Close</button>
+
+    </div>
+  </div>
+</div>
+
+<!-- ============================================
+     APPEARANCE PICKER (small dialog)
+     ============================================ -->
+<div id="appearancePicker" class="modal" style="z-index: 7000;">
+  <div class="modal-content" style="max-width: 340px;">
+    <div class="modal-header">
+      <h2>🌙 Appearance</h2>
+      <button class="close-btn" onclick="closeAppearancePicker()">✕</button>
+    </div>
+    <div class="modal-body">
+
+      <button class="appearance-option" data-theme-choice="light" onclick="chooseTheme('light')">
+        <span class="appearance-option-icon">☀️</span>
+        <span class="appearance-option-label">
+          Light
+          <span class="appearance-option-sub">Bright, easy to read</span>
+        </span>
+        <span class="appearance-option-check">✓</span>
+      </button>
+
+      <button class="appearance-option" data-theme-choice="dark" onclick="chooseTheme('dark')">
+        <span class="appearance-option-icon">🌙</span>
+        <span class="appearance-option-label">
+          Dark
+          <span class="appearance-option-sub">Easier on the eyes at night</span>
+        </span>
+        <span class="appearance-option-check">✓</span>
+      </button>
+
+      <button class="appearance-option" data-theme-choice="system" onclick="chooseTheme('system')">
+        <span class="appearance-option-icon">🌗</span>
+        <span class="appearance-option-label">
+          System
+          <span class="appearance-option-sub">Follow your phone's setting</span>
+        </span>
+        <span class="appearance-option-check">✓</span>
+      </button>
+
+    </div>
+  </div>
+</div>
+
+<!-- ============================================
+     ACCOUNT SETTINGS (edit display name)
+     ============================================ -->
+<div id="accountSettingsModal" class="modal" style="z-index: 7000;">
+  <div class="modal-content" style="max-width: 380px;">
+    <div class="modal-header">
+      <h2>👤 Account</h2>
+      <button class="close-btn" onclick="closeAccountSettings()">✕</button>
+    </div>
+    <div class="modal-body">
+
+      <label style="display:block;font-size:13px;font-weight:700;color:var(--text-gray);margin-bottom:6px;">Email</label>
+<div id="accountEmail" style="background:var(--bg-subtle);border:1px solid var(--border-subtle);border-radius:var(--radius-btn);padding:12px 14px;font-size:14px;color:var(--text-body);margin-bottom:16px;word-break:break-all;">
+  —
+</div>
+
+<label for="accountNameInput" style="display:block;font-size:13px;font-weight:700;color:var(--text-gray);margin-bottom:6px;">Display name</label>
+<input type="text" id="accountNameInput" placeholder="Your name" maxlength="40">
+
+<label for="accountPhoneInput" style="display:block;font-size:13px;font-weight:700;color:var(--text-gray);margin-bottom:6px;margin-top:12px;">Phone number</label>
+<input type="tel" id="accountPhoneInput" placeholder="e.g. 024 456 7890" autocomplete="tel">
+
+<div class="account-phone-hint">Buyers will see this when they tap "Show phone number" on your listings.</div>
+
+<label for="accountLocationArea" style="display:block;font-size:13px;font-weight:700;color:var(--text-gray);margin-bottom:6px;margin-top:12px;">Area / town</label>
+<input type="text" id="accountLocationArea" placeholder="e.g. East Legon" autocomplete="address-level2">
+
+<label for="accountLocationRegion" style="display:block;font-size:13px;font-weight:700;color:var(--text-gray);margin-bottom:6px;margin-top:12px;">Region</label>
+<select id="accountLocationRegion">
+  <option value="">Select a region</option>
+  <option>Greater Accra</option>
+  <option>Ashanti</option>
+  <option>Western</option>
+  <option>Central</option>
+  <option>Eastern</option>
+  <option>Northern</option>
+  <option>Volta</option>
+  <option>Upper East</option>
+  <option>Upper West</option>
+  <option>Bono</option>
+  <option>Bono East</option>
+  <option>Ahafo</option>
+  <option>North East</option>
+  <option>Oti</option>
+  <option>Savannah</option>
+  <option>Western North</option>
+</select>
+
+<label for="accountBioInput" style="display:block;font-size:13px;font-weight:700;color:var(--text-gray);margin-bottom:6px;margin-top:12px;">Bio</label>
+<input type="text" id="accountBioInput" placeholder="A short line about you (optional)" maxlength="160" autocomplete="off">
+
+<label for="accountWebsiteInput" style="display:block;font-size:13px;font-weight:700;color:var(--text-gray);margin-bottom:6px;margin-top:12px;">Website</label>
+<input type="url" id="accountWebsiteInput" placeholder="https://example.com (optional)" autocomplete="off">
+
+<div class="account-phone-hint">Your home location. Used to pre-fill delivery addresses and shown on your profile.</div>
+
+      <div id="accountError" style="color:#d9534f;font-size:13px;margin:6px 0 4px;display:none;"></div>
+
+      <button class="buy-btn" style="margin-top:12px;" onclick="saveAccountName()">Save</button>
+      <button style="width:100%;margin-top:8px;background:none;border:none;color:var(--text-gray);font-size:14px;cursor:pointer;" onclick="closeAccountSettings()">Cancel</button>
+
+    </div>
+  </div>
+</div>
+
+<!-- ============================================
+     PASSWORD SETTINGS
+     ============================================ -->
+<div id="passwordSettingsModal" class="modal" style="z-index: 7000;">
+  <div class="modal-content" style="max-width: 380px;">
+    <div class="modal-header">
+      <h2>🔒 Change Password</h2>
+      <button class="close-btn" onclick="closePasswordSettings()">✕</button>
+    </div>
+    <div class="modal-body">
+
+      <label for="pwdCurrent" style="display:block;font-size:13px;font-weight:700;color:var(--text-gray);margin-bottom:6px;">Current password</label>
+      <input type="password" id="pwdCurrent" placeholder="Your current password" autocomplete="current-password">
+
+      <label for="pwdNew" style="display:block;font-size:13px;font-weight:700;color:var(--text-gray);margin-bottom:6px;margin-top:8px;">New password</label>
+      <input type="password" id="pwdNew" placeholder="At least 6 characters" autocomplete="new-password">
+
+      <label for="pwdConfirm" style="display:block;font-size:13px;font-weight:700;color:var(--text-gray);margin-bottom:6px;margin-top:8px;">Confirm new password</label>
+      <input type="password" id="pwdConfirm" placeholder="Type it again" autocomplete="new-password">
+
+      <div id="pwdError" style="color:#d9534f;font-size:13px;margin:8px 0 4px;display:none;"></div>
+
+      <button class="buy-btn" style="margin-top:12px;" onclick="saveNewPassword()">Save</button>
+      <button style="width:100%;margin-top:8px;background:none;border:none;color:var(--text-gray);font-size:14px;cursor:pointer;" onclick="closePasswordSettings()">Cancel</button>
+
+    </div>
+  </div>
+</div>
+
+<!-- ============================================
+     NOTIFICATION ASK DIALOG (post-signup)
+     ============================================ -->
+<div id="notifAskModal" class="modal" style="z-index: 7200;">
+  <div class="modal-content" style="max-width: 380px;">
+    <div class="modal-header">
+      <h2>🔔 Stay in the loop</h2>
+      <button class="close-btn" onclick="dismissNotifAsk()">✕</button>
+    </div>
+    <div class="modal-body">
+
+      <div style="text-align:center;padding:6px 0 14px;">
+        <div style="font-size:52px;line-height:1;margin-bottom:10px;">🔔</div>
+        <p style="font-size:15px;color:var(--text-body);line-height:1.55;margin:0;">
+          Get notified about <strong>new messages</strong> and <strong>orders</strong> — even when you're not in the app.
+        </p>
+      </div>
+
+      <p style="font-size:12.5px;color:var(--text-muted);line-height:1.5;text-align:center;margin-bottom:16px;">
+        You can turn this off any time in Settings.
+      </p>
+
+      <button class="buy-btn" style="margin-top:4px;" onclick="acceptNotifAsk()">🔔 Turn on notifications</button>
+      <button style="width:100%;margin-top:8px;background:none;border:none;color:var(--text-gray);font-size:14px;cursor:pointer;padding:8px;" onclick="dismissNotifAsk()">Not now</button>
+
+    </div>
+  </div>
+</div>
+
+<!-- ============================================
+     RATING SUMMARY MODAL
+     ============================================ -->
+<div id="ratingSummaryModal" class="modal" style="z-index: 7050;">
+  <div class="modal-content" style="max-width: 380px;">
+    <div class="modal-header">
+      <h2>⭐ Rating</h2>
+      <button class="close-btn" onclick="closeRatingSummary()">✕</button>
+    </div>
+    <div class="modal-body">
+
+      <!-- Big average block -->
+      <div class="rating-summary-hero">
+        <div class="rating-summary-number" id="ratingSummaryAvg">—</div>
+        <div class="rating-summary-stars" id="ratingSummaryStars">☆☆☆☆☆</div>
+        <div class="rating-summary-count" id="ratingSummaryCount">No reviews yet</div>
+      </div>
+
+      <!-- Distribution bars -->
+      <div class="rating-summary-dist" id="ratingSummaryDist"></div>
+
+      <!-- Empty state (shown when there are 0 reviews) -->
+      <div id="ratingSummaryEmpty" class="rating-summary-empty" style="display:none;">
+        You haven't received any reviews yet. Once someone rates you, the breakdown will show up here.
+      </div>
+
+      <!-- Action button -->
+      <button id="ratingSummarySeeAll" class="rating-summary-btn" onclick="openReviewsFromSummary()">
+        See all reviews →
+      </button>
+
+    </div>
+  </div>
+</div>
+
+
+<!-- ============================================
+     NOTIFICATION SETTINGS DIALOG
+     ============================================ -->
+<div id="notificationsModal" class="modal" style="z-index: 7000;">
+  <div class="modal-content" style="max-width: 380px;">
+    <div class="modal-header">
+      <h2>🔔 Notifications</h2>
+      <button class="close-btn" onclick="closeNotificationSettings()">✕</button>
+    </div>
+    <div class="modal-body">
+
+      <p style="font-size:14px;color:var(--text-body);line-height:1.5;margin-bottom:18px;">
+        Get notified about new messages, orders, and order updates — even when you're not in the app.
+      </p>
+
+      <!-- Toggle row -->
+      <button id="notifToggle" class="notif-toggle" onclick="toggleNotifications()">
+        <span class="notif-toggle-icon" id="notifToggleIcon">🔔</span>
+        <span class="notif-toggle-label" id="notifToggleLabel">Turn on notifications</span>
+        <span class="notif-toggle-switch" id="notifToggleSwitch"></span>
+      </button>
+
+      <!-- Status hint (shown when permission is denied at the browser level) -->
+      <div id="notifHint" style="display:none;font-size:12px;color:var(--text-gray);line-height:1.5;background:var(--bg-subtle);border-radius:10px;padding:10px 12px;margin-top:14px;">
+      </div>
+
+      <button class="buy-btn" style="margin-top:18px;" onclick="closeNotificationSettings()">Close</button>
+
+    </div>
+  </div>
+</div>
+
+
+<!-- ============================================
+     ABOUT DIALOG
+     ============================================ -->
+<div id="aboutModal" class="modal" style="z-index: 7000;">
+  <div class="modal-content" style="max-width: 380px;">
+    <div class="modal-header">
+      <h2>ℹ️ About Marketa</h2>
+      <button class="close-btn" onclick="closeAboutSettings()">✕</button>
+    </div>
+    <div class="modal-body">
+
+      <div style="text-align:center;padding:10px 0 18px;">
+        <div style="font-size:48px;line-height:1;margin-bottom:6px;">🛒</div>
+        <div style="font-size:20px;font-weight:800;color:var(--text-dark);">Marketa</div>
+        <div style="font-size:13px;color:var(--text-gray);margin-top:2px;">Version 1.0.0</div>
+      </div>
+
+      <div class="detail-kv" style="border-top:1px solid var(--border-subtle);padding:12px 0 6px;">
+        <span class="detail-kv-label">Made for</span>
+        <span class="detail-kv-value">Ghana 🇬🇭</span>
+      </div>
+      <div class="detail-kv" style="padding:6px 0;">
+        <span class="detail-kv-label">Support email</span>
+        <span class="detail-kv-value">support@marketa.gh</span>
+      </div>
+      <div class="detail-kv" style="padding:6px 0;">
+        <span class="detail-kv-label">WhatsApp</span>
+        <span class="detail-kv-value">+233 20 000 0000</span>
+      </div>
+
+      <p style="font-size:12px;color:var(--text-muted);text-align:center;margin-top:16px;line-height:1.5;">
+        Marketa is a marketplace platform. We facilitate escrow-protected transactions between buyers and sellers in Ghana.
+      </p>
+
+      <button class="buy-btn" style="margin-top:16px;" onclick="closeAboutSettings()">Close</button>
+
+    </div>
+  </div>
+</div>
+
+<!-- ============================================
+     DELETE ACCOUNT DIALOG
+     ============================================ -->
+<div id="deleteAccountModal" class="modal" style="z-index: 7000;">
+  <div class="modal-content" style="max-width: 380px;">
+    <div class="modal-header" style="background:#d9534f;">
+      <h2>🗑️ Delete Account</h2>
+      <button class="close-btn" onclick="closeDeleteAccount()">✕</button>
+    </div>
+    <div class="modal-body">
+
+      <p style="font-size:14px;color:var(--text-body);line-height:1.5;margin-bottom:14px;">
+        <strong style="color:#d9534f;">This cannot be undone.</strong>
+        Your account, listings, orders, chats and reviews will be permanently removed from Marketa.
+      </p>
+
+      <p style="font-size:13px;color:var(--text-gray);line-height:1.5;margin-bottom:10px;">
+        Type <strong>DELETE</strong> below to confirm.
+      </p>
+
+      <input type="text" id="deleteConfirmInput" placeholder="Type DELETE" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" style="text-transform:uppercase;">
+
+      <div id="deleteAccountError" style="color:#d9534f;font-size:13px;margin:6px 0 4px;display:none;"></div>
+
+      <button class="buy-btn" style="margin-top:10px;background:#d9534f;" onclick="confirmDeleteAccount()">🗑️ Delete My Account</button>
+      <button style="width:100%;margin-top:8px;background:none;border:none;color:var(--text-gray);font-size:14px;cursor:pointer;" onclick="closeDeleteAccount()">Cancel</button>
+
+    </div>
+  </div>
+</div>
+
+<!-- ============================================
+     WELCOME ONBOARDING MODAL
+     ============================================ -->
+<div id="welcomeModal" class="modal" style="z-index: 8000; display: none;">
+  <div class="modal-content" style="max-width: 340px; text-align: center; padding-bottom: 20px;">
+    
+    <div style="background: linear-gradient(135deg, #0E5C42 0%, #17936A 100%); padding: 30px 20px 24px; border-radius: 16px 16px 0 0; color: white;">
+      <div style="font-size: 56px; line-height: 1; margin-bottom: 12px;">🛒</div>
+      <h1 style="font-size: 24px; font-weight: 800; margin: 0 0 8px; letter-spacing: -0.5px;">Welcome to Marketa!</h1>
+      <p style="font-size: 14px; opacity: 0.9; margin: 0; line-height: 1.4;">Ghana's safest marketplace.</p>
+    </div>
+
+    <div style="padding: 24px 20px 10px; text-align: left;">
+      
+      <!-- Feature 1 -->
+      <div style="display: flex; gap: 12px; margin-bottom: 16px;">
+        <div style="font-size: 22px; background: var(--green-light); width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">🛡️</div>
+        <div>
+          <div style="font-weight: 800; font-size: 14px; color: var(--text-dark); margin-bottom: 2px;">Escrow Protection</div>
+          <div style="font-size: 12.5px; color: var(--text-gray); line-height: 1.4;">Your money is held safely until you confirm you received the item.</div>
+        </div>
+      </div>
+
+      <!-- Feature 2 -->
+      <div style="display: flex; gap: 12px; margin-bottom: 16px;">
+        <div style="font-size: 22px; background: var(--green-light); width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">💬</div>
+        <div>
+          <div style="font-weight: 800; font-size: 14px; color: var(--text-dark); margin-bottom: 2px;">Chat with Sellers</div>
+          <div style="font-size: 12.5px; color: var(--text-gray); line-height: 1.4;">Ask questions and arrange meetups directly in the app.</div>
+        </div>
+      </div>
+
+      <!-- Feature 3 -->
+      <div style="display: flex; gap: 12px;">
+        <div style="font-size: 22px; background: var(--green-light); width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">📈</div>
+        <div>
+          <div style="font-weight: 800; font-size: 14px; color: var(--text-dark); margin-bottom: 2px;">Sell Anything</div>
+          <div style="font-size: 12.5px; color: var(--text-gray); line-height: 1.4;">Tap the "Sell" button below to list your first item for free.</div>
+        </div>
+      </div>
+
+    </div>
+
+    <div style="padding: 20px;">
+      <button class="buy-btn" style="border-radius: 12px; font-size: 16px; padding: 14px;" onclick="closeWelcomeModal()">Let's Go 🚀</button>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================
+     MARKETA CUSTOM DIALOG — replaces alert()/confirm()
+     ============================================ -->
+<div id="marketaDialog" class="marketa-dialog">
+  <div class="marketa-dialog-backdrop" onclick="marketaDialogBackdrop()"></div>
+  <div class="marketa-dialog-card">
+    <div class="marketa-dialog-header">
+      <h2 id="marketaDialogTitle">Message</h2>
+      <button class="marketa-dialog-close" onclick="marketaDialogClose()">✕</button>
+    </div>
+    <div class="marketa-dialog-body">
+      <p id="marketaDialogText">…</p>
+    </div>
+    <div class="marketa-dialog-actions">
+      <button id="marketaDialogCancel" class="marketa-dialog-btn marketa-dialog-btn-secondary" onclick="marketaDialogNo()" style="display:none;">Cancel</button>
+      <button id="marketaDialogConfirm" class="marketa-dialog-btn marketa-dialog-btn-primary" onclick="marketaDialogYes()">OK</button>
+    </div>
+  </div>
+</div>
+
+<!-- Toast -->
+<div id="marketaToast" class="marketa-toast"></div>
+<!-- Restore overlay — shown briefly when refreshing to reopen the last screen -->
+<div id="restoreOverlay" class="restore-overlay" style="display:none;">
+  <div class="restore-overlay-inner">
+    <div class="restore-overlay-spinner"></div>
+    <div class="restore-overlay-text">Restoring your screen…</div>
+  </div>
+</div>
+<!-- ============================================
+     FULL-SCREEN SEARCH PAGE
+     ============================================ -->
+<div id="searchPage" class="search-page" style="display:none;">
+  <div class="search-page-header">
+    <button class="search-page-back" onclick="closeSearchPage()">←</button>
+    <div class="search-page-input-wrap">
+      <span class="search-page-icon">🔍</span>
+      <input type="text" id="searchPageInput" class="search-page-input" placeholder="Search products..." autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" oninput="searchPageQuery()">
+      <button class="search-page-clear" id="searchPageClear" onclick="clearSearchPageInput()" style="display:none;">✕</button>
+    </div>
+  </div>
+
+  <!-- Search filters -->
+<div class="browse-filters" style="padding-top: 0; border-bottom: none;">
+  <select id="searchCondition" onchange="searchPageQuery()">
+    <option value="">Condition</option>
+    <option>New</option>
+    <option>Used</option>
+    <option>Refurbished</option>
+  </select>
+
+  <select id="searchSort" onchange="searchPageQuery()">
+    <option value="newest">Newest</option>
+    <option value="priceLow">Price ↑</option>
+    <option value="priceHigh">Price ↓</option>
+  </select>
+
+  <input type="number" id="searchMinPrice" placeholder="Min GH₵" oninput="searchPageQuery()">
+  <input type="number" id="searchMaxPrice" placeholder="Max GH₵" oninput="searchPageQuery()">
+</div>
+
+  <div class="search-page-body">
+    <div id="searchPageResults" class="search-page-results"></div>
+    <p id="searchPageEmpty" class="search-page-empty" style="display:none;">
+      Type something to search for products on Marketa.
+    </p>
+  </div>
+</div>
+
+<!-- ============================================
+     SAVED ITEMS PAGE (full-screen overlay)
+     ============================================ -->
+<div id="wishlistPage" class="profile-page" style="display:none;">
+
+  <div class="page-shell">
+
+    <!-- Breadcrumb -->
+    <button class="page-back-link" onclick="closeWishlistPage()">
+      <span class="page-back-arrow">←</span>
+      Back to account
+    </button>
+
+    <div class="page-breadcrumb">
+      <span>My account</span>
+      <span class="bc-sep">›</span>
+      <span class="bc-current">Saved items</span>
+    </div>
+
+    <!-- Title + subtext -->
+    <h1 class="page-title">Saved items</h1>
+    <p class="page-subtitle">Everything you've bookmarked to look at later.</p>
+
+    <!-- Count pill -->
+    <div class="saved-count-pill" id="wishlistCount">0 saved</div>
+
+    <!-- Saved items grid -->
+    <div id="wishlistGrid" class="saved-grid"></div>
+
+    <!-- Empty state -->
+    <div id="wishlistEmpty" class="empty-state" style="display:none;">
+      <div class="empty-state-icon">❤️</div>
+      <div class="empty-state-title">No saved items yet</div>
+      <div class="empty-state-text">Tap the 🤍 on any listing to save it here.</div>
+    </div>
+
+  </div>
+
+</div>
+
+<!-- ============================================
+     FOLLOWERS PAGE
+     ============================================ -->
+<div id="followersPage" class="search-page" style="display:none;">
+  <div class="search-page-header">
+    <button class="search-page-back" onclick="closeFollowersPage()">←</button>
+    <h2 style="color:white;font-size:17px;margin:0;">Followers</h2>
+    <div style="width:40px;"></div>
+  </div>
+  <div class="search-page-body">
+    <div id="followersList" class="follow-list"></div>
+    <p id="followersEmpty" class="search-page-empty" style="display:none;">
+      No followers yet.
+    </p>
+  </div>
+</div>
+
+<!-- ============================================
+     FOLLOWING PAGE
+     ============================================ -->
+<div id="followingPage" class="search-page" style="display:none;">
+  <div class="search-page-header">
+    <button class="search-page-back" onclick="closeFollowingPage()">←</button>
+    <h2 style="color:white;font-size:17px;margin:0;">Following</h2>
+    <div style="width:40px;"></div>
+  </div>
+  <div class="search-page-body">
+    <div id="followingList" class="follow-list"></div>
+    <p id="followingEmpty" class="search-page-empty" style="display:none;">
+      You're not following anyone yet.
+    </p>
+  </div>
+</div>
+
+<!-- ============================================
+     USER LISTINGS PAGE — shows a user's listings
+     ============================================ -->
+<div id="userListingsPage" class="search-page" style="display:none;">
+  <div class="search-page-header">
+    <button class="search-page-back" onclick="closeUserListingsPage()">←</button>
+    <h2 id="userListingsTitle" style="color:white;font-size:17px;margin:0;">Listings</h2>
+    <div style="width:40px;"></div>
+  </div>
+  <div class="search-page-body">
+    <div id="userListingsGrid" class="search-page-results"></div>
+    <p id="userListingsEmpty" class="search-page-empty" style="display:none;">
+      This user has no active listings.
+    </p>
+  </div>
+</div>
+
+<!-- ============================================
+     BROWSE HISTORY PAGE
+     ============================================ -->
+<div id="browseHistoryPage" class="profile-page" style="display:none;">
+
+  <div class="page-shell">
+
+    <!-- Breadcrumb -->
+    <button class="page-back-link" onclick="closeBrowseHistory()">
+      <span class="page-back-arrow">←</span>
+      Back to home
+    </button>
+
+    <div class="page-breadcrumb">
+      <span>Home</span>
+      <span class="bc-sep">›</span>
+      <span class="bc-current">Browse history</span>
+    </div>
+
+    <!-- Title + subtext -->
+    <h1 class="page-title">Browse history</h1>
+    <p class="page-subtitle">Items you've recently viewed on Marketa.</p>
+
+    <!-- Action row -->
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
+      <div class="saved-count-pill" id="browseHistoryCount">0 items</div>
+      <button onclick="clearBrowseHistory()" style="background:none; border:none; color:var(--accent-red); font-size:13px; font-weight:700; cursor:pointer; padding:8px;">Clear History</button>
+    </div>
+
+    <!-- Grid -->
+    <div id="browseHistoryGrid" class="history-list"></div>
+
+    <!-- Empty state -->
+    <div id="browseHistoryEmpty" class="empty-state" style="display:none;">
+      <div class="empty-state-icon">👣</div>
+      <div class="empty-state-title">No history yet</div>
+      <div class="empty-state-text">Listings you view will appear here so you can easily find them again.</div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ============================================
+     BROWSE PAGE — all listings with filters + sort
+     ============================================ -->
+<div id="browsePage" class="search-page" style="display:none;">
+  <div class="search-page-header">
+    <button class="search-page-back" onclick="closeBrowsePage()">←</button>
+    <h2 style="color:white;font-size:17px;margin:0;">Browse All Listings</h2>
+    <div style="width:40px;"></div>
+  </div>
+
+<!-- Search bar -->
+<div class="browse-search-wrap">
+  <span class="browse-search-icon">🔍</span>
+  <input type="text" id="browseSearchInput" class="browse-search-input" placeholder="Search in listings..." oninput="applyBrowseFilters()" autocomplete="off">
+  <button class="browse-search-clear" id="browseSearchClear" onclick="clearBrowseSearch()" style="display:none;">✕</button>
+</div>
+  <!-- Filters -->
+  <div class="browse-filters">
+    <select id="browseCondition" onchange="applyBrowseFilters()">
+  <option value="">Condition</option>
+  <option>New</option>
+  <option>Used</option>
+  <option>Refurbished</option>
+</select>
+
+<select id="browseSort" onchange="applyBrowseFilters()">
+  <option value="newest">Newest</option>
+  <option value="priceLow">Price ↑</option>
+  <option value="priceHigh">Price ↓</option>
+</select>
+
+    <input type="number" id="browseMinPrice" placeholder="Min GH₵" oninput="applyBrowseFilters()">
+    <input type="number" id="browseMaxPrice" placeholder="Max GH₵" oninput="applyBrowseFilters()">
+  </div>
+
+  <!-- Grid -->
+  <div class="search-page-body">
+    <p id="browseCount" class="browse-count"></p>
+    <div id="browseGrid" class="search-page-results"></div>
+    <p id="browseEmpty" class="search-page-empty" style="display:none;">
+      No listings match your filters.
+    </p>
   </div>
 </div>
 
 </body>
 </html>
-
